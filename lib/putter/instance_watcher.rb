@@ -21,8 +21,13 @@ module Putter
     end
 
     def add_method(method)
+      log_method(method)
+    end
+
+    def log_method(method, &strategy)
       @proxy.instance_eval do
         define_method(method) do |*proxy_args, &blk|
+          strategy.call *proxy_args if strategy
           super *proxy_args, &blk
         end
       end

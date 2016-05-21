@@ -110,4 +110,32 @@ describe Putter::InstanceWatcher do
       expect(watcher.proxy.instance_methods).to include(:hello)
     end
   end
+
+  describe "#log_method" do
+    it "accepts a block with arguments" do
+      test = TestClass.new
+      watcher = Putter::InstanceWatcher.new(test)
+
+      watcher.log_method(:test_instance_method) do
+        puts "I am calling a method"
+      end
+
+      expect do
+        test.test_instance_method
+      end.to output(/I am calling a method/).to_stdout
+    end
+
+    it "accepts a block with arguments" do
+      test = TestClass.new
+      watcher = Putter::InstanceWatcher.new(test)
+
+      watcher.log_method(:test_instance_method_arg) do |*args|
+        puts "Print the args: #{args}"
+      end
+
+      expect do
+        test.test_instance_method_arg("world")
+      end.to output(/Print the args: \["world"\]/).to_stdout
+    end
+  end
 end
