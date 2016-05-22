@@ -101,7 +101,7 @@ describe Putter::InstanceWatcher do
   end
 
   describe "#add_method" do
-    it "defines a method on the proxy" do
+    it "defers to log method" do
       test = TestClass.new
       watcher = Putter::InstanceWatcher.new(test)
 
@@ -112,6 +112,24 @@ describe Putter::InstanceWatcher do
   end
 
   describe "#log_method" do
+    it "defines a method on the proxy" do
+      test = TestClass.new
+      watcher = Putter::InstanceWatcher.new(test)
+
+      watcher.log_method(:hello)
+
+      expect(watcher.proxy.instance_methods).to include(:hello)
+    end
+
+    it "does not call the method" do
+      test = TestClass.new
+      watcher = Putter::InstanceWatcher.new(test)
+
+      expect(test).to_not receive(:test_instance_method)
+
+      watcher.log_method(:test_instance_method)
+    end
+
     it "accepts a block with arguments" do
       test = TestClass.new
       watcher = Putter::InstanceWatcher.new(test)
@@ -120,7 +138,7 @@ describe Putter::InstanceWatcher do
         puts "I am calling a method"
       end
 
-      expect do
+     expect do
         test.test_instance_method
       end.to output(/I am calling a method/).to_stdout
     end
