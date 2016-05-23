@@ -1,4 +1,4 @@
-class TestClass
+class Test
   attr_reader :name
 
   def initialize(name="Putter")

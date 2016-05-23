@@ -3,7 +3,7 @@ require "spec_helper"
 describe Putter::InstanceDebugger do
   describe "initialize" do
     it "sends methods to the wrapped object" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       expect(test).to receive(:test_instance_method)
@@ -12,7 +12,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "sends arguments to the wrapped object" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       expect(test).to receive(:test_instance_method_arg).with("Hello")
@@ -21,7 +21,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "sends blocks to the wrapped object" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       expect(test).to receive(:test_instance_method_block).and_call_original
@@ -34,7 +34,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "sends arguments and blocks to the wrapped object" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       expect(test).to receive(:test_instance_method_block_arg).and_call_original
@@ -48,7 +48,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "prepends the proxy only once" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
       stub_test_instance_methods(test)
 
@@ -61,8 +61,8 @@ describe Putter::InstanceDebugger do
     end
 
     it "does not add the proxy to other instances of a class" do
-      proxied_test = TestClass.new
-      non_proxied_test = TestClass.new
+      proxied_test = Test.new
+      non_proxied_test = Test.new
       debugger = Putter::InstanceDebugger.new(proxied_test)
       stub_test_instance_methods(proxied_test)
       stub_test_instance_methods(non_proxied_test)
@@ -79,7 +79,7 @@ describe Putter::InstanceDebugger do
 
   describe "#method_missing" do
     it "adds a method to the proxy" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
       stub_test_instance_methods(test)
 
@@ -89,7 +89,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "only adds the method once" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
       stub_test_instance_methods(test)
 
@@ -102,7 +102,7 @@ describe Putter::InstanceDebugger do
 
   describe "#add_method" do
     it "defers to log method" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       debugger.add_method(:hello)
@@ -113,7 +113,7 @@ describe Putter::InstanceDebugger do
 
   describe "#log_method" do
     it "defines a method on the proxy" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       debugger.log_method(:hello)
@@ -122,7 +122,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "does not call the method" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       expect(test).to_not receive(:test_instance_method)
@@ -130,8 +130,8 @@ describe Putter::InstanceDebugger do
       debugger.log_method(:test_instance_method)
     end
 
-    it "accepts a block with arguments" do
-      test = TestClass.new
+    it "accepts a block" do
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       debugger.log_method(:test_instance_method) do
@@ -144,7 +144,7 @@ describe Putter::InstanceDebugger do
     end
 
     it "accepts a block with arguments" do
-      test = TestClass.new
+      test = Test.new
       debugger = Putter::InstanceDebugger.new(test)
 
       debugger.log_method(:test_instance_method_arg) do |*args|
