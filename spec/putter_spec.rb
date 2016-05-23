@@ -4,18 +4,20 @@ describe Putter do
   end
 
   describe "#debug" do
-    it "creates a watcher for the object" do
-      test = TestClass.new
-      watcher = Putter.debug(test)
+    context "instances" do
+      it "creates a watcher for the object" do
+        test = TestClass.new
+        watcher = Putter.debug(test)
 
-      expect(watcher.object).to eq(test)
-    end
+        expect(watcher.object).to eq(test)
+      end
 
-    it "creates a method proxy" do
-      test = TestClass.new
-      watcher = Putter.debug(test)
+      it "creates a method proxy" do
+        test = TestClass.new
+        watcher = Putter.debug(test)
 
-      expect(test.singleton_class.ancestors.first).to be_an_instance_of(Putter::MethodProxy)
+        expect(test.singleton_class.ancestors.first).to be_an_instance_of(Putter::MethodProxy)
+      end
     end
   end
 end
