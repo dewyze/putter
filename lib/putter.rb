@@ -1,5 +1,6 @@
 require "putter/version"
 require "putter/instance_debugger"
+require "putter/class_debugger"
 require "putter/method_proxy"
 require "putter/debugger_proxy"
 
