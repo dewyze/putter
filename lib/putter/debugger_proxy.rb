@@ -1,8 +1,8 @@
 module Putter
-  module WatcherProxy
-    def self.get_watcher(object)
+  module DebuggerProxy
+    def self.get_debugger(object)
       if object.class != Class && object.class != Module
-        return InstanceWatcher
+        return InstanceDebugger
       end
     end
   end

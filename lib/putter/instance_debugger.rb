@@ -1,5 +1,5 @@
 module Putter
-  class InstanceWatcher
+  class InstanceDebugger
     attr_reader :proxy, :object
 
     def initialize(obj)
