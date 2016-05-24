@@ -11,8 +11,8 @@ def stub_test_instance_methods(test)
   allow(test).to receive(:test_instance_method_block)
 end
 
-def stub_test_class_methods
-  allow(TestClass).to receive(:test_class_method)
-  allow(TestClass).to receive(:test_class_method_arg)
-  allow(TestClass).to receive(:test_class_method_block)
+def stub_test_class_methods(klass)
+  allow(klass).to receive(:test_class_method)
+  allow(klass).to receive(:test_class_method_arg)
+  allow(klass).to receive(:test_class_method_block)
 end

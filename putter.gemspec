@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Putter provides a variety of methods to easily use puts debugging. It can reveal what methods are called, attributes at the time those methods are called, and locations of an object when the method is called."
   spec.description   = "Putter makes puts debugging easy."
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/dewyze/putter"
   spec.license       = "MIT"
 
   spec.required_ruby_version = '~> 2.0'

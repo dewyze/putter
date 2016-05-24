@@ -21,21 +21,3 @@ class Test
     yield "World"
   end
 end
-
-class TestClass
-  def self.test_class_method
-    puts "test_class_method"
-  end
-
-  def self.test_class_method_arg(arg)
-    puts "test_class_method_arg: #{arg}"
-  end
-
-  def self.test_class_method_block(&blk)
-    yield
-  end
-
-  def self.test_class_method_block_arg(&blk)
-    yield "World"
-  end
-end
