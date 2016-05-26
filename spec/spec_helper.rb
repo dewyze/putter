@@ -5,14 +5,9 @@ require "pry"
 require "putter"
 require "test_class"
 
-def stub_test_instance_methods(test)
-  allow(test).to receive(:test_instance_method)
-  allow(test).to receive(:test_instance_method_arg)
-  allow(test).to receive(:test_instance_method_block)
-end
-
-def stub_test_class_methods(klass)
-  allow(klass).to receive(:test_class_method)
-  allow(klass).to receive(:test_class_method_arg)
-  allow(klass).to receive(:test_class_method_block)
+def stub_methods(obj)
+  allow(obj).to receive(:test_method)
+  allow(obj).to receive(:test_method_arg)
+  allow(obj).to receive(:test_method_block)
+  allow(obj).to receive(:test_method_block_arg)
 end
