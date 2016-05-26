@@ -1,12 +1,9 @@
-require "putter/version"
-require "putter/instance_debugger"
-require "putter/class_debugger"
+require "putter/follower"
 require "putter/method_proxy"
-require "putter/debugger_proxy"
+require "putter/version"
 
 module Putter
-  def self.debug(object)
-    debugger_proxy = DebuggerProxy.get_debugger(object)
-    debugger_proxy.new(object)
+  def self.follow(obj)
+    Putter::Follower.new(obj)
   end
 end
