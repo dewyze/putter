@@ -53,6 +53,7 @@ describe Putter::Follower do
         occurrences = subject.singleton_class.ancestors.count {|a| a.is_a?(Putter::MethodProxy)}
         expect(occurrences).to eq(1)
       end
+
     end
   end
 
@@ -194,6 +195,17 @@ describe Putter::Follower do
       presence = test.class.ancestors.any? {|a| a.is_a?(Putter::MethodProxy)}
 
       expect(presence).to be false
+    end
+  end
+
+  describe "#initialize" do
+    it "does not respond to core methods" do
+      hash = { a: 1, b: 2 }
+      follower = Putter::Follower.new(hash)
+
+      expect(hash).to receive(:to_json)
+
+      follower.to_json
     end
   end
 end

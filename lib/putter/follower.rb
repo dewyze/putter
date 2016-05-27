@@ -1,5 +1,5 @@
 module Putter
-  class Follower
+  class Follower < BasicObject
     attr_reader :proxy, :object
 
     def initialize(obj)
