@@ -6,11 +6,9 @@ class Test
   end
 
   def test_method
-    puts "test_instance_method"
   end
 
   def test_method_arg(arg)
-    puts "test_instance_method_arg: #{arg}"
   end
 
   def test_method_block(&blk)
