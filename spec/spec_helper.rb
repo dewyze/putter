@@ -5,6 +5,12 @@ require "pry"
 require "putter"
 require "test_class"
 
+module Putter
+  module PrintStrategy
+    Testing = Proc.new {}
+  end
+end
+
 def stub_methods(obj)
   allow(obj).to receive(:test_method)
   allow(obj).to receive(:test_method_arg)

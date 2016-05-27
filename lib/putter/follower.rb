@@ -2,10 +2,11 @@ module Putter
   class Follower < BasicObject
     attr_reader :proxy, :object
 
-    def initialize(obj)
+    def initialize(obj, options={})
       @object = obj
       @proxy = MethodProxy.new
       @object.singleton_class.send(:prepend, proxy)
+      @strategy = options.fetch(:strategy, PrintStrategy::Default)
     end
 
     def method_missing(method, *args, &blk)
@@ -21,13 +22,13 @@ module Putter
     end
 
     def add_method(method)
-      log_method(method)
+      log_method(method, &@strategy)
     end
 
     def log_method(method, &strategy)
       @proxy.instance_eval do
         define_method(method) do |*proxy_args, &blk|
-          strategy.call *proxy_args if strategy
+          strategy.call self, method, proxy_args if strategy
           super *proxy_args, &blk
         end
       end

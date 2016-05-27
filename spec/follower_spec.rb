@@ -2,7 +2,7 @@ describe Putter::Follower do
   shared_examples "initialize" do
     context "#initialize" do
       it "sends methods to the wrapped object" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         expect(subject).to receive(:test_method)
 
@@ -10,7 +10,7 @@ describe Putter::Follower do
       end
 
       it "sends arguments to the wrapped object" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         expect(subject).to receive(:test_method_arg).with("Hello")
 
@@ -18,7 +18,7 @@ describe Putter::Follower do
       end
 
       it "sends blocks to the wrapped object" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         expect(subject).to receive(:test_method_block).and_call_original
 
@@ -30,7 +30,7 @@ describe Putter::Follower do
       end
 
       it "sends arguments and blocks to the wrapped object" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         expect(subject).to receive(:test_method_block_arg).and_call_original
 
@@ -43,7 +43,7 @@ describe Putter::Follower do
       end
 
       it "prepends the proxy only once" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
         stub_methods(subject)
 
         follower.test_method
@@ -60,7 +60,7 @@ describe Putter::Follower do
   shared_examples "method_missing" do
     context "#method_missing" do
       it "adds a method to the proxy" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
         stub_methods(subject)
 
         follower.test_method
@@ -69,7 +69,7 @@ describe Putter::Follower do
       end
 
       it "only adds the method once" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
         stub_methods(subject)
 
         expect(follower).to receive(:add_method).once.and_call_original
@@ -83,7 +83,7 @@ describe Putter::Follower do
   shared_examples "add_method" do
     context "#add_method" do
       it "defers to log method" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         follower.add_method(:hello)
 
@@ -95,7 +95,7 @@ describe Putter::Follower do
   shared_examples "log_method" do
     context "#log_method" do
       it "defines a method on the proxy" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         follower.log_method(:hello)
 
@@ -103,7 +103,7 @@ describe Putter::Follower do
       end
 
       it "does not call the method" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         expect(subject).to_not receive(:test_method)
 
@@ -111,7 +111,7 @@ describe Putter::Follower do
       end
 
       it "accepts a block" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
         follower.log_method(:test_method) do
           puts "I am calling a method"
@@ -123,15 +123,15 @@ describe Putter::Follower do
       end
 
       it "accepts a block with arguments" do
-        follower = Putter::Follower.new(subject)
+        follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
 
-        follower.log_method(:test_method_arg) do |*args|
-          puts "Print the args: #{args}"
+        follower.log_method(:test_method_arg) do |subject, method, args|
+          puts "Obj: #{subject}, Method: :#{method}, Args: #{args}"
         end
 
         expect do
           subject.test_method_arg("world")
-        end.to output(/Print the args: \["world"\]/).to_stdout
+        end.to output(/Obj: #{subject}, Method: :test_method_arg, Args: \["world"\]/).to_stdout
       end
     end
   end
@@ -147,7 +147,7 @@ describe Putter::Follower do
     it "does not add the proxy to other instances of a class" do
       proxied_test = Test.new
       non_proxied_test = Test.new
-      follower = Putter::Follower.new(proxied_test)
+      follower = Putter::Follower.new(proxied_test, strategy: Putter::PrintStrategy::Testing)
       stub_methods(proxied_test)
       stub_methods(non_proxied_test)
 
@@ -188,7 +188,7 @@ describe Putter::Follower do
     include_examples "log_method"
 
     it "does not add the proxy to instances of a class" do
-      follower = Putter::Follower.new(subject)
+      follower = Putter::Follower.new(subject, strategy: Putter::PrintStrategy::Testing)
       test = subject.new
       stub_methods(subject)
 
@@ -201,7 +201,7 @@ describe Putter::Follower do
   describe "#initialize" do
     it "does not respond to core methods" do
       hash = { a: 1, b: 2 }
-      follower = Putter::Follower.new(hash)
+      follower = Putter::Follower.new(hash, strategy: Putter::PrintStrategy::Testing)
 
       expect(hash).to receive(:to_json)
 
