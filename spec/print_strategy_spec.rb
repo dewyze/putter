@@ -20,16 +20,6 @@ RSpec.describe Putter::PrintStrategy do
       end.to output(/-----------------/).to_stdout
     end
 
-    it "outputs the line title" do
-      expect do
-        Putter::PrintStrategy::Default.call
-      end.to output(/\t\t    Line:  /).to_stdout
-    end
-
-    xit "outputs the line title" do
-      pending "This needs to be tested"
-    end
-
     it "outputs the method title" do
       expect do
         Putter::PrintStrategy::Default.call
