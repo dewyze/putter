@@ -10,6 +10,10 @@ module Putter
       puts
     end
 
+    DefaultResult = Proc.new do |result|
+      puts "\t\t  Result:  ".colorize(:cyan) + "#{result}".colorize(:green)
+    end
+
     def self.object_name(obj)
       if obj.class == Class
         obj.name

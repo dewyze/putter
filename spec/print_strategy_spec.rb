@@ -51,6 +51,20 @@ RSpec.describe Putter::PrintStrategy do
     end
   end
 
+  describe Putter::PrintStrategy::DefaultResult do
+    it "outputs the Result title" do
+      expect do
+        Putter::PrintStrategy::DefaultResult.call
+      end.to output(/\t\t  Result:  /).to_stdout
+    end
+
+    it "outputs the Result vaule" do
+      expect do
+        Putter::PrintStrategy::DefaultResult.call "Hello World"
+      end.to output(/Hello World/).to_stdout
+    end
+  end
+
   describe "object_name" do
     it "returns the correct value for classes" do
       expect(Putter::PrintStrategy.object_name(Test)).to eq("Test")
