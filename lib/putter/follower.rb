@@ -6,7 +6,7 @@ module Putter
       @object = obj
       @proxy = MethodProxy.new
       @object.singleton_class.send(:prepend, proxy)
-      @strategy = options.fetch(:strategy, PrintStrategy::Default)
+      @strategy = options.fetch(:strategy, PrintStrategy::DefaultCall)
 
       if options.has_key?(:methods)
         @proxied_methods = options[:methods].map(&:to_s)
