@@ -48,7 +48,6 @@ describe Putter::Follower do
 
       it "prepends the proxy only once" do
         follower = get_follower(subject)
-        stub_methods(subject)
 
         follower.test_method
         follower.test_method_arg("method 2")
@@ -64,7 +63,6 @@ describe Putter::Follower do
     context "#method_missing" do
       it "adds a method to the proxy" do
         follower = get_follower(subject)
-        stub_methods(subject)
 
         follower.test_method
 
@@ -73,7 +71,6 @@ describe Putter::Follower do
 
       it "only adds the method once" do
         follower = get_follower(subject)
-        stub_methods(subject)
 
         expect(follower).to receive(:add_method).once.and_call_original
 
@@ -143,7 +140,6 @@ describe Putter::Follower do
     describe "#proxied_methods" do
       it "proxies all methods if none are specified" do
         follower = get_follower(subject)
-        stub_methods(subject)
 
         follower.test_method
         follower.test_method_arg("World")
@@ -157,7 +153,6 @@ describe Putter::Follower do
           methods: ["test_method_arg"],
           strategy: Putter::PrintStrategy::Testing,
         )
-        stub_methods(subject)
 
         follower.test_method
         follower.test_method_arg("World")
@@ -172,7 +167,6 @@ describe Putter::Follower do
           methods: [:test_method_arg],
           strategy: Putter::PrintStrategy::Testing,
         )
-        stub_methods(subject)
 
         follower.test_method
         follower.test_method_arg("World")
@@ -186,7 +180,6 @@ describe Putter::Follower do
           methods: ["test_method_arg"],
           strategy: Putter::PrintStrategy::Testing,
         )
-        stub_methods(subject)
 
         expect(subject).to receive(:test_method)
 
@@ -208,8 +201,6 @@ describe Putter::Follower do
       proxied_test = Test.new
       non_proxied_test = Test.new
       follower = get_follower(proxied_test)
-      stub_methods(proxied_test)
-      stub_methods(non_proxied_test)
 
       follower.test_method
 
@@ -225,11 +216,9 @@ describe Putter::Follower do
     subject do
       Class.new do
         def self.test_method
-          puts "test_class_method"
         end
 
         def self.test_method_arg(arg)
-          puts "test_class_method_arg: #{arg}"
         end
 
         def self.test_method_block(&blk)
@@ -251,7 +240,6 @@ describe Putter::Follower do
     it "does not add the proxy to instances of a class" do
       follower = get_follower(subject)
       test = subject.new
-      stub_methods(subject)
 
       presence = test.class.ancestors.any? {|a| a.is_a?(Putter::MethodProxy)}
 

@@ -10,10 +10,3 @@ module Putter
     Testing = Proc.new {}
   end
 end
-
-def stub_methods(obj)
-  allow(obj).to receive(:test_method)
-  allow(obj).to receive(:test_method_arg)
-  allow(obj).to receive(:test_method_block)
-  allow(obj).to receive(:test_method_block_arg)
-end
