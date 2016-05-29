@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    putter (0.0.1)
-      colorize
+    putter (0.1.1)
+      colorize (~> 0)
 
 GEM
   remote: https://rubygems.org/
