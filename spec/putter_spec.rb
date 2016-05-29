@@ -104,7 +104,7 @@ describe Putter do
     end
   end
 
-  describe "configure" do
+  describe "configuration" do
     before(:each) do
       @method_strategy = Proc.new do |obj, method, args|
         puts "Obj: #{obj}, Method: #{method}, Args: #{args}"
@@ -130,6 +130,16 @@ describe Putter do
 
     it "prints results with the configured strategy" do
       expect(Putter.configuration.result_strategy).to eq(@result_strategy)
+    end
+
+    describe "#reset" do
+      it "resets the configuration" do
+        Putter.reset_configuration
+
+        expect(Putter.configuration.print_results).to be true
+        expect(Putter.configuration.method_strategy).to eq(Putter::PrintStrategy::MethodStrategy)
+        expect(Putter.configuration.result_strategy).to eq(Putter::PrintStrategy::ResultStrategy)
+      end
     end
   end
 end

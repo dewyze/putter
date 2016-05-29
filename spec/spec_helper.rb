@@ -10,3 +10,9 @@ module Putter
     Testing = Proc.new {}
   end
 end
+
+RSpec.configure do |config|
+  config.before(:each) do
+    Putter.reset_configuration
+  end
+end
