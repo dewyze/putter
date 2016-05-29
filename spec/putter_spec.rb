@@ -103,4 +103,33 @@ describe Putter do
       end
     end
   end
+
+  describe "configure" do
+    before(:each) do
+      @method_strategy = Proc.new do |obj, method, args|
+        puts "Obj: #{obj}, Method: #{method}, Args: #{args}"
+      end
+      @result_strategy = Proc.new do |result|
+        puts "Result: #{result}"
+      end
+
+      Putter.configure do |config|
+        config.print_results = false
+        config.method_strategy = @method_strategy
+        config.result_strategy = @result_strategy
+      end
+    end
+
+    it "does not print results" do
+      expect(Putter.configuration.print_results).to be false
+    end
+
+    it "prints method calls with the configured strategy" do
+      expect(Putter.configuration.method_strategy).to eq(@method_strategy)
+    end
+
+    it "prints results with the configured strategy" do
+      expect(Putter.configuration.result_strategy).to eq(@result_strategy)
+    end
+  end
 end
