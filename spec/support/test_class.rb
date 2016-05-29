@@ -6,9 +6,11 @@ class Test
   end
 
   def test_method
+    "Hello World!"
   end
 
   def test_method_arg(arg)
+    "Hello #{arg}!"
   end
 
   def test_method_block(&blk)

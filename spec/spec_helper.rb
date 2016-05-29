@@ -21,6 +21,7 @@ RSpec.configure do |config|
   config.before(:each) do
     Putter.configure do |config|
       config.method_strategy = Putter::PrintStrategy::Silent
+      config.result_strategy = Putter::PrintStrategy::Silent
       config.print_results = false
     end
   end

@@ -44,6 +44,30 @@ describe Putter do
           follower.test_method_arg("World")
         end.to output(/Method: :test_method, Args: \[\]\nMethod: :test_method_arg, Args: \["World"\]/m).to_stdout
       end
+
+      it "prints the debugging info for results" do
+        Putter.configure do |config|
+          config.result_strategy = Putter::PrintStrategy::ResultTesting
+          config.print_results = true
+        end
+        follower = Putter.follow(subject)
+
+        expect do
+          follower.test_method
+        end.to output(/Result: Hello World!/).to_stdout
+      end
+
+      it "does not print debugging info if print results is false" do
+        Putter.configure do |config|
+          config.result_strategy = Putter::PrintStrategy::ResultTesting
+          config.print_results = false
+        end
+        follower = Putter.follow(subject)
+
+        expect do
+          follower.test_method
+        end.to_not output(/Result: Hello World!/).to_stdout
+      end
     end
   end
 
@@ -59,9 +83,11 @@ describe Putter do
       subject do
         Class.new do
           def self.test_method
+            "Hello World!"
           end
 
           def self.test_method_arg(arg)
+            "Hello #{arg}!"
           end
 
           def self.test_method_block(&blk)
