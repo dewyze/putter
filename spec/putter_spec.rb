@@ -3,26 +3,23 @@ describe Putter do
     expect(Putter::VERSION).not_to be nil
   end
 
-  describe "#follow" do
-    context "instances" do
+  shared_examples "follow" do
+    describe "#follow" do
       it "creates a follower for the object" do
-        test = Test.new
-        follower = Putter.follow(test)
+        follower = get_follower(subject)
 
-        expect(follower.object).to eq(test)
+        expect(follower.object).to eq(subject)
       end
 
       it "creates a method proxy" do
-        test = Test.new
-        follower = Putter.follow(test)
+        follower = Putter.follow(subject)
 
-        expect(test.singleton_class.ancestors.first).to be_an_instance_of(Putter::MethodProxy)
+        expect(subject.singleton_class.ancestors.first).to be_an_instance_of(Putter::MethodProxy)
       end
 
       it "accepts specific methods" do
         Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
-        test = Test.new
-        follower = Putter.follow(test, methods: [:test_method_arg])
+        follower = Putter.follow(subject, methods: [:test_method_arg])
 
         expect do
           follower.test_method_arg("World")
@@ -31,8 +28,7 @@ describe Putter do
 
       it "ignores unspecified methods" do
         Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
-        test = Test.new
-        follower = Putter.follow(test, methods: [:test_method])
+        follower = Putter.follow(subject, methods: [:test_method])
 
         expect do
           follower.test_method_arg("World")
@@ -41,8 +37,7 @@ describe Putter do
 
       it "prints debugging info for method calls" do
         Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
-        test = Test.new
-        follower = Putter.follow(test)
+        follower = Putter.follow(subject)
 
         expect do
           follower.test_method
@@ -50,57 +45,36 @@ describe Putter do
         end.to output(/Method: :test_method, Args: \[\]\nMethod: :test_method_arg, Args: \["World"\]/m).to_stdout
       end
     end
+  end
+
+
+  describe "#follow" do
+    context "instances" do
+      subject { Test.new }
+
+      include_examples "follow"
+    end
 
     context "classes" do
-      before(:each) do
-        @class = Class.new do
+      subject do
+        Class.new do
           def self.test_method
           end
 
           def self.test_method_arg(arg)
           end
+
+          def self.test_method_block(&blk)
+            yield
+          end
+
+          def self.test_method_block_arg(&blk)
+            yield "World"
+          end
         end
       end
 
-      it "creates a follower for the object" do
-        follower = Putter.follow(@class)
-
-        expect(follower.object).to eq(@class)
-      end
-
-      it "creates a method proxy" do
-        follower = Putter.follow(@class)
-
-        expect(@class.singleton_class.ancestors.first).to be_an_instance_of(Putter::MethodProxy)
-      end
-
-      it "accepts specific methods" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
-        follower = Putter.follow(@class, methods: [:test_method_arg])
-
-        expect do
-          follower.test_method_arg("World")
-        end.to output(/Method: :test_method_arg, Args: \["World"\]/).to_stdout
-      end
-
-      it "ignores unspecified methods" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
-        follower = Putter.follow(@class, methods: [:test_method])
-
-        expect do
-          follower.test_method_arg("World")
-        end.to_not output(/:test_method_arg/).to_stdout
-      end
-
-      it "prints debugging info for method calls" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
-        follower = Putter.follow(@class)
-
-        expect do
-          follower.test_method
-          follower.test_method_arg("World")
-        end.to output(/Method: :test_method, Args: \[\]\nMethod: :test_method_arg, Args: \["World"\]/m).to_stdout
-      end
+      include_examples "follow"
     end
   end
 

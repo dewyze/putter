@@ -7,7 +7,7 @@ require "test_class"
 
 module Putter
   module PrintStrategy
-    Testing = Proc.new {}
+    Silent = Proc.new {}
     MethodTesting = Proc.new do |_, method, args|
       puts "Method: :#{method}, Args: #{args}"
     end
@@ -20,8 +20,12 @@ end
 RSpec.configure do |config|
   config.before(:each) do
     Putter.configure do |config|
-      config.method_strategy = Putter::PrintStrategy::Testing
+      config.method_strategy = Putter::PrintStrategy::Silent
       config.print_results = false
     end
   end
+end
+
+def get_follower(obj)
+  follower = Putter::Follower.new(obj)
 end

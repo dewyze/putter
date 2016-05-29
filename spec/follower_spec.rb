@@ -1,8 +1,4 @@
 describe Putter::Follower do
-  def get_follower(obj)
-    follower = Putter::Follower.new(obj, strategy: Putter::PrintStrategy::Testing)
-  end
-
   shared_examples "initialize" do
     context "#initialize" do
       it "sends methods to the wrapped object" do
@@ -124,11 +120,7 @@ describe Putter::Follower do
       end
 
       it "only proxies specified methods as strings" do
-        follower = Putter::Follower.new(
-          subject,
-          methods: ["test_method_arg"],
-          strategy: Putter::PrintStrategy::Testing,
-        )
+        follower = Putter::Follower.new(subject, methods: ["test_method_arg"])
 
         follower.test_method
         follower.test_method_arg("World")
@@ -138,11 +130,7 @@ describe Putter::Follower do
       end
 
       it "accepts symbols" do
-        follower = Putter::Follower.new(
-          subject,
-          methods: [:test_method_arg],
-          strategy: Putter::PrintStrategy::Testing,
-        )
+        follower = Putter::Follower.new(subject, methods: [:test_method_arg])
 
         follower.test_method
         follower.test_method_arg("World")
@@ -151,11 +139,7 @@ describe Putter::Follower do
       end
 
       it "calls unfollowed methods on the proxied object" do
-        follower = Putter::Follower.new(
-          subject,
-          methods: ["test_method_arg"],
-          strategy: Putter::PrintStrategy::Testing,
-        )
+        follower = Putter::Follower.new(subject, methods: ["test_method_arg"])
 
         expect(subject).to receive(:test_method)
 
