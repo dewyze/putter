@@ -82,22 +82,10 @@ describe Putter::Follower do
 
   shared_examples "add_method" do
     context "#add_method" do
-      it "defers to log method" do
-        follower = get_follower(subject)
-
-        follower.add_method(:hello)
-
-        expect(follower.proxy.instance_methods).to include(:hello)
-      end
-    end
-  end
-
-  shared_examples "log_method" do
-    context "#log_method" do
       it "defines a method on the proxy" do
         follower = get_follower(subject)
 
-        follower.log_method(:hello)
+        follower.add_method(:hello)
 
         expect(follower.proxy.instance_methods).to include(:hello)
       end
@@ -107,31 +95,19 @@ describe Putter::Follower do
 
         expect(subject).to_not receive(:test_method)
 
-        follower.log_method(:test_method)
+        follower.add_method(:test_method)
       end
 
-      it "accepts a block" do
-        follower = get_follower(subject)
-
-        follower.log_method(:test_method) do
-          puts "I am calling a method"
+      it "prints the method and args using the configured strategy" do
+        Putter.configuration.method_strategy = Proc.new do |_, method, args|
+          puts "Method: :#{method}, Args: #{args}"
         end
 
-        expect do
-          subject.test_method
-        end.to output(/I am calling a method/).to_stdout
-      end
-
-      it "accepts a block with arguments" do
         follower = get_follower(subject)
 
-        follower.log_method(:test_method_arg) do |subject, method, args|
-          puts "Obj: #{subject}, Method: :#{method}, Args: #{args}"
-        end
-
         expect do
-          subject.test_method_arg("world")
-        end.to output(/Obj: #{subject}, Method: :test_method_arg, Args: \["world"\]/).to_stdout
+          follower.test_method_arg("world")
+        end.to output(/Method: :test_method_arg, Args: \["world"\]/).to_stdout
       end
     end
   end
@@ -194,7 +170,6 @@ describe Putter::Follower do
     include_examples "initialize"
     include_examples "method_missing"
     include_examples "add_method"
-    include_examples "log_method"
     include_examples "proxied_methods"
 
     it "does not add the proxy to other instances of a class" do
@@ -209,6 +184,19 @@ describe Putter::Follower do
 
       expect(proxied_test_presence).to be true
       expect(non_proxied_test_presence).to be false
+    end
+
+    it "returns the correct label for instances" do
+      test = Test.new
+      follower = Putter::Follower.new(test)
+
+      Putter.configuration.method_strategy = Proc.new do |label, method|
+        puts "Label: #{label}"
+      end
+
+      expect do
+        follower.test_method
+      end.to output(/Label: Test instance/).to_stdout
     end
   end
 
@@ -234,7 +222,6 @@ describe Putter::Follower do
     include_examples "initialize"
     include_examples "method_missing"
     include_examples "add_method"
-    include_examples "log_method"
     include_examples "proxied_methods"
 
     it "does not add the proxy to instances of a class" do
@@ -244,6 +231,22 @@ describe Putter::Follower do
       presence = test.class.ancestors.any? {|a| a.is_a?(Putter::MethodProxy)}
 
       expect(presence).to be false
+    end
+
+    it "returns the correct label for instances" do
+      class TestClass1
+        def self.test_method
+        end
+      end
+      follower = Putter::Follower.new(TestClass1)
+
+      Putter.configuration.method_strategy = Proc.new do |label|
+        puts "Label: #{label}"
+      end
+
+      expect do
+        follower.test_method
+      end.to output(/Label: TestClass1/).to_stdout
     end
   end
 

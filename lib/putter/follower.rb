@@ -5,9 +5,8 @@ module Putter
     def initialize(obj, options={})
       @object = obj
       @proxy = MethodProxy.new
+      @label = _object_label
       @object.singleton_class.send(:prepend, proxy)
-      @strategy = options.fetch(:strategy, PrintStrategy::MethodStrategy)
-
       if options.has_key?(:methods)
         @proxied_methods = options[:methods].map(&:to_s)
         @proxy_all_methods = false
@@ -29,13 +28,9 @@ module Putter
     end
 
     def add_method(method)
-      log_method(method, &@strategy)
-    end
-
-    def log_method(method, &strategy)
-      @proxy.instance_eval do
+      @proxy.instance_exec(@label) do |label|
         define_method(method) do |*proxy_args, &blk|
-          strategy.call self, method, proxy_args if strategy
+          ::Putter.configuration.method_strategy.call label, method, proxy_args
           super *proxy_args, &blk
         end
       end
@@ -44,6 +39,14 @@ module Putter
     def _add_method?(method)
       return (@proxy_all_methods || proxied_methods.include?(method.to_s)) &&
               !@proxy.instance_methods.include?(method)
+    end
+
+    def _object_label
+      if @object.class == ::Class
+        @object.name
+      else
+        @object.class.name + " instance"
+      end
     end
   end
 end

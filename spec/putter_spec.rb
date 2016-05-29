@@ -20,34 +20,34 @@ describe Putter do
       end
 
       it "accepts specific methods" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
         test = Test.new
         follower = Putter.follow(test, methods: [:test_method_arg])
 
         expect do
           follower.test_method_arg("World")
-        end.to output(/Method:.*:test_method_arg.*\n.*Args:.*\["World"\]/).to_stdout
+        end.to output(/Method: :test_method_arg, Args: \["World"\]/).to_stdout
       end
 
       it "ignores unspecified methods" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
         test = Test.new
         follower = Putter.follow(test, methods: [:test_method])
 
         expect do
           follower.test_method_arg("World")
-        end.to_not output(/:test_method_args\n.*World/).to_stdout
+        end.to_not output(/:test_method_arg/).to_stdout
       end
 
       it "prints debugging info for method calls" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
         test = Test.new
         follower = Putter.follow(test)
 
         expect do
           follower.test_method
-        end.to output(/Method:.*:test_method/).to_stdout
-
-        expect do
           follower.test_method_arg("World")
-        end.to output(/:test_method_arg.*\n.*World/).to_stdout
+        end.to output(/Method: :test_method, Args: \[\]\nMethod: :test_method_arg, Args: \["World"\]/m).to_stdout
       end
     end
 
@@ -75,31 +75,31 @@ describe Putter do
       end
 
       it "accepts specific methods" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
         follower = Putter.follow(@class, methods: [:test_method_arg])
 
         expect do
           follower.test_method_arg("World")
-        end.to output(/Method:.*:test_method_arg.*\n.*Args:.*\["World"\]/).to_stdout
+        end.to output(/Method: :test_method_arg, Args: \["World"\]/).to_stdout
       end
 
       it "ignores unspecified methods" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
         follower = Putter.follow(@class, methods: [:test_method])
 
         expect do
           follower.test_method_arg("World")
-        end.to_not output(/:test_method_args\n.*World/).to_stdout
+        end.to_not output(/:test_method_arg/).to_stdout
       end
 
       it "prints debugging info for method calls" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
         follower = Putter.follow(@class)
 
         expect do
           follower.test_method
-        end.to output(/Method:.*:test_method/).to_stdout
-
-        expect do
           follower.test_method_arg("World")
-        end.to output(/:test_method_arg.*\n.*World/).to_stdout
+        end.to output(/Method: :test_method, Args: \[\]\nMethod: :test_method_arg, Args: \["World"\]/m).to_stdout
       end
     end
   end

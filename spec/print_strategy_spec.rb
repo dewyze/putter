@@ -64,14 +64,4 @@ RSpec.describe Putter::PrintStrategy do
       end.to output(/Hello World/).to_stdout
     end
   end
-
-  describe "object_name" do
-    it "returns the correct value for classes" do
-      expect(Putter::PrintStrategy.object_name(Test)).to eq("Test")
-    end
-
-    it "returns the correct value for instances" do
-      expect(Putter::PrintStrategy.object_name(Test.new)).to eq("Test instance")
-    end
-  end
 end
