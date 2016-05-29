@@ -9,24 +9,16 @@ Gem::Specification.new do |spec|
   spec.authors       = ["John DeWyze"]
   spec.email         = ["john.dewyze@gmail.com"]
 
-  spec.summary       = "Putter provides a variety of methods to easily use puts debugging. It can reveal what methods are called, attributes at the time those methods are called, and locations of an object when the method is called."
-  spec.description   = "Putter makes puts debugging easy."
+  spec.description   = "Putter provides a variety of methods to easily use puts debugging. It can reveal what methods are called, the arguments that were passed in, and what the result of the method call."
+  spec.summary       = "Putter makes puts debugging easy."
   spec.homepage      = "https://github.com/dewyze/putter"
   spec.license       = "MIT"
 
-  spec.required_ruby_version = '~> 2.0'
-
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
-  end
+  spec.required_ruby_version = '~> 2.1'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'colorize'

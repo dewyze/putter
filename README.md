@@ -1,8 +1,10 @@
 # Putter
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/putter`. To experiment with that code, run `bin/console` for an interactive prompt.
+It rhymes with gooder, not gutter.
 
-TODO: Delete this and the text above, and describe your gem
+Putter is a tool for more easily implementing puts debugging. Instead of littering files with various puts statements, you can wrap an object with a follower and print out anytime a method is called on that object. This will follow the object throughout its path in the stack.
+
+For now Putter can only follow a specific the speficic object that it wraps. It currently does not watch a class to see what objects were passed to it unless that specific instance of the class is passed through the stack.
 
 ## Installation
 
@@ -22,20 +24,80 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Putter.follow
 
-## Development
+Currently there is only one use for Putter, the `follow` method.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+class MyObject
+  def hello(arg, punc)
+    "Hello #{arg.to_s}#{punc}"
+  end
+end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+module Service
+  def self.do_stuff(obj)
+    obj.hello(:world, "!")
+  end
+end
+
+object = Putter.follow(MyObject.new)
+Service.do_stuff(object)
+```
+
+Will output:
+
+```bash
+Putter Debugging:  Object instance
+-----------------
+          Method:  :value
+            Args:  [:world, "!"]
+          Result:  "Hello world!"
+```
+
+#### `Putter.follow` Options
+
+```ruby
+Putter.follow(
+  object_to_follow,
+  label: "My object"  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances,
+  methods: ["value"]  # If the value is nil, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
+)
+```
+
+## Configuration
+
+Putter currently has 3 configuration options:
+
+```ruby
+Putter.configure do |config|
+  # 'method_strategy' takes a block that receives three arguments with the label, method, and args array, respectively. This block will be used after each method is called, "puts" statements can be used, or any other method callbacks that are helpful.
+  # Defaults to Putter::PrintStrategy::MethodStrategy
+  config.method_strategy = Proc.new {|label, method, args| puts "Label: #{label}, Method: #{method}, Args: #{args}" }
+
+  # 'result_strategy' takes a block that receives a single argument outputs the results of the method call
+  # Defaults to Putter::PrintStrategy::ResultStrategy
+  config.result_strategy = Proc.new {|result| puts "The result was #{result}" }
+
+  # 'print_results' determines whether or not to print the results block at all.
+  # Defaults to true.
+  config.print_results = false
+end
+```
+
+## Planned Features
+Feel free to open a PR to implement any of these if they are not yet added:
+
+- Ability to watch any instance of a class calling a method
+- Active Record specific printing
+- Errors for when attempting to follow a `BasicObject`
+- Protected methods (so things like `inspect` don't cause stack level too deep errors
+- Checking Rails.env to double check that putter is not called in production
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/putter. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
-
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
