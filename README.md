@@ -71,9 +71,13 @@ Putter currently has 3 configuration options:
 
 ```ruby
 Putter.configure do |config|
-  # 'method_strategy' takes a block that receives three arguments with the label, method, and args array, respectively. This block will be used after each method is called, "puts" statements can be used, or any other method callbacks that are helpful.
+  # 'method_strategy' takes a block that receives three arguments with the label, method, and args array,
+  # respectively. This block will be used after each method is called, "puts" statements can be used,
+  # or any other method callbacks that are helpful.
   # Defaults to Putter::PrintStrategy::MethodStrategy
-  config.method_strategy = Proc.new {|label, method, args| puts "Label: #{label}, Method: #{method}, Args: #{args}" }
+  config.method_strategy = Proc.new do |label, method, args|
+    puts "Label: #{label}, Method: #{method}, Args: #{args}"
+  end
 
   # 'result_strategy' takes a block that receives a single argument outputs the results of the method call
   # Defaults to Putter::PrintStrategy::ResultStrategy
