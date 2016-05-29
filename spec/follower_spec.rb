@@ -174,7 +174,7 @@ describe Putter::Follower do
       test = Test.new
       follower = Putter::Follower.new(test)
 
-      Putter.configuration.method_strategy = Proc.new do |label, method|
+      Putter.configuration.method_strategy = Proc.new do |label|
         puts "Label: #{label}"
       end
 

@@ -5,14 +5,8 @@ module Putter
     def initialize(obj, options={})
       @object = obj
       @proxy = MethodProxy.new
-      @label = _object_label
       @object.singleton_class.send(:prepend, proxy)
-      if options.has_key?(:methods)
-        @proxied_methods = options[:methods].map(&:to_s)
-        @proxy_all_methods = false
-      else
-        @proxy_all_methods = true
-      end
+      _set_options(options)
     end
 
     def method_missing(method, *args, &blk)
@@ -43,16 +37,32 @@ module Putter
               !@proxy.instance_methods.include?(method)
     end
 
-    def _object_label
-      if @object.class == ::Class
-        @object.name
+    def _set_label(label)
+      if !label.nil?
+        @label = label
+      elsif @object.class == ::Class
+        @label = @object.name
       else
-        @object.class.name + " instance"
+        @label = @object.class.name + " instance"
       end
     end
 
     def _print_results?
       ::Putter.configuration.print_results
+    end
+
+    def _set_methods(methods)
+      if methods.nil?
+        @proxy_all_methods = true
+      else
+        @proxied_methods = methods.map(&:to_s)
+        @proxy_all_methods = false
+      end
+    end
+
+    def _set_options(options)
+      _set_label(options[:label])
+      _set_methods(options[:methods])
     end
   end
 end

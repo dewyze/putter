@@ -68,6 +68,15 @@ describe Putter do
           follower.test_method
         end.to_not output(/Result: Hello World!/).to_stdout
       end
+
+      it "prints the label option if it is present" do
+        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodStrategy
+        follower = Putter.follow(subject, label: "custom label")
+
+        expect do
+          follower.test_method
+        end.to output(/Putter Debugging:.*custom label/).to_stdout
+      end
     end
   end
 

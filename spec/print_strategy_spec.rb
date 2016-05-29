@@ -6,18 +6,10 @@ RSpec.describe Putter::PrintStrategy do
       end.to output(/\tPutter Debugging:/).to_stdout
     end
 
-    it "outputs the object class name with instance" do
-      test = Test.new
-
+    it "outputs the label" do
       expect do
-        Putter::PrintStrategy::MethodStrategy.call test
-      end.to output(/Test instance/).to_stdout
-    end
-
-    it "outputs the object class name" do
-      expect do
-        Putter::PrintStrategy::MethodStrategy.call Test
-      end.to output(/Test/).to_stdout
+        Putter::PrintStrategy::MethodStrategy.call "My Label"
+      end.to output(/My Label/).to_stdout
     end
 
     it "outputs the '---' break" do
