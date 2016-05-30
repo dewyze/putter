@@ -52,6 +52,17 @@ describe Putter::Follower do
         occurrences = subject.singleton_class.ancestors.count {|a| a.is_a?(Putter::MethodProxy)}
         expect(occurrences).to eq(1)
       end
+
+    end
+  end
+
+  describe "#initialize" do
+    it "raises an error when attempting to follow a BasicObject" do
+      klass = Class.new(BasicObject)
+
+      expect do
+        follower = get_follower(klass.new)
+      end.to raise_error(Putter::BasicObjectError)
     end
   end
 

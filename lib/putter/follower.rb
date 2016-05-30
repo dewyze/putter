@@ -5,7 +5,11 @@ module Putter
     def initialize(obj, options={})
       @object = obj
       @proxy = MethodProxy.new
-      @object.singleton_class.send(:prepend, proxy)
+      begin
+        @object.singleton_class.send(:prepend, proxy)
+      rescue ::NoMethodError
+        ::Kernel.raise ::Putter::BasicObjectError
+      end
       _set_options(options)
     end
 

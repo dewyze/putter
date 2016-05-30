@@ -94,7 +94,7 @@ Feel free to open a PR to implement any of these if they are not yet added:
 
 - Ability to watch any instance of a class calling a method
 - Active Record specific printing
-- Errors for when attempting to follow a `BasicObject`
+- Ignore methods defined on `Object`
 - Protected methods (so things like `inspect` don't cause stack level too deep errors
 - Checking Rails.env to double check that putter is not called in production
 
