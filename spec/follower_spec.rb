@@ -52,7 +52,6 @@ describe Putter::Follower do
         occurrences = subject.singleton_class.ancestors.count {|a| a.is_a?(Putter::MethodProxy)}
         expect(occurrences).to eq(1)
       end
-
     end
   end
 
@@ -83,6 +82,14 @@ describe Putter::Follower do
 
         follower.test_method
         follower.test_method
+      end
+
+      it "does not add Object methods" do
+        follower = get_follower(subject)
+
+        follower.to_s
+
+        expect(follower.proxy.instance_methods).to_not include(:to_s)
       end
     end
   end

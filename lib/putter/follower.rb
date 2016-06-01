@@ -37,8 +37,17 @@ module Putter
     end
 
     def _add_method?(method)
-      return (@proxy_all_methods || proxied_methods.include?(method.to_s)) &&
-              !@proxy.instance_methods.include?(method)
+      return false if _is_ignored_method?(method)
+      return false if @proxy.instance_methods.include?(method)
+      return @proxy_all_methods || proxied_methods.include?(method.to_s)
+    end
+
+    def _is_ignored_method?(method)
+      ::Putter.configuration.ignore_methods_from.each do |klass|
+        return true if klass.methods.include?(method.to_sym)
+        return true if klass.instance_methods.include?(method.to_sym)
+      end
+      return false
     end
 
     def _set_label(label)
