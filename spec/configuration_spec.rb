@@ -24,4 +24,24 @@ RSpec.describe Putter::Configuration do
       expect(configuration.ignore_methods_from).to eq([Object])
     end
   end
+
+  describe "#ignore_methods_from" do
+    it "returns an empty array when ignore_methods_from is nil" do
+      ::Putter.configuration.ignore_methods_from = nil
+
+      expect(::Putter.configuration.ignore_methods_from).to eq([])
+    end
+
+    it "returns an array when ignore_methods_from is an object" do
+      ::Putter.configuration.ignore_methods_from = Object
+
+      expect(::Putter.configuration.ignore_methods_from).to eq([Object])
+    end
+
+    it "returns an array when ignore_methods_from is an array" do
+      ::Putter.configuration.ignore_methods_from = [Object, Test]
+
+      expect(::Putter.configuration.ignore_methods_from).to eq([Object, Test])
+    end
+  end
 end
