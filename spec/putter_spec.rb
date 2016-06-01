@@ -126,6 +126,7 @@ describe Putter do
         config.print_results = false
         config.method_strategy = @method_strategy
         config.result_strategy = @result_strategy
+        config.ignore_methods_from = nil
       end
     end
 
@@ -139,6 +140,10 @@ describe Putter do
 
     it "prints results with the configured strategy" do
       expect(Putter.configuration.result_strategy).to eq(@result_strategy)
+    end
+
+    it "ignores methods from the configured classes" do
+      expect(Putter.configuration.ignore_methods_from).to eq(nil)
     end
 
     describe "#reset" do

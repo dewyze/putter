@@ -17,5 +17,11 @@ RSpec.describe Putter::Configuration do
 
       expect(configuration.print_results).to eq(true)
     end
+
+    it "initializes ignore_methods_from with 'Object'" do
+      configuration = Putter::Configuration.new
+
+      expect(configuration.ignore_methods_from).to eq([Object])
+    end
   end
 end
