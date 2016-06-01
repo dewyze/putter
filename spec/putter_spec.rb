@@ -143,7 +143,7 @@ describe Putter do
     end
 
     it "ignores methods from the configured classes" do
-      expect(Putter.configuration.ignore_methods_from).to eq(nil)
+      expect(Putter.configuration.ignore_methods_from).to eq([])
     end
 
     describe "#reset" do
