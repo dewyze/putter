@@ -86,6 +86,11 @@ Putter.configure do |config|
   # 'print_results' determines whether or not to print the results block at all.
   # Defaults to true.
   config.print_results = false
+
+  # 'ignore_methods_from' takes an array of class names and will ignore both class and instance methods
+  # from those classes when adding methods to the proxy and adding debug output
+  # Defaults to [Object]
+  config.ignore_methods_from = [Object, ActiveRecord::Base]
 end
 ```
 
@@ -94,9 +99,8 @@ Feel free to open a PR to implement any of these if they are not yet added:
 
 - Ability to watch any instance of a class calling a method
 - Active Record specific printing
-- Ignore methods defined on `Object`
-- Protected methods (so things like `inspect` don't cause stack level too deep errors
 - Checking Rails.env to double check that putter is not called in production
+- Whitelist methods from ignored classes
 
 ## Contributing
 
