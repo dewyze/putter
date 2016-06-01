@@ -37,6 +37,7 @@ module Putter
     end
 
     def _add_method?(method)
+      return true if _is_whitelisted_method?(method)
       return false if _is_ignored_method?(method)
       return false if @proxy.instance_methods.include?(method)
       return @proxy_all_methods || proxied_methods.include?(method.to_s)
@@ -48,6 +49,10 @@ module Putter
         return true if klass.instance_methods.include?(method.to_sym)
       end
       return false
+    end
+
+    def _is_whitelisted_method?(method)
+      ::Putter.configuration.methods_whitelist.map(&:to_sym).include?(method.to_sym)
     end
 
     def _set_label(label)
