@@ -127,6 +127,7 @@ describe Putter do
         config.method_strategy = @method_strategy
         config.result_strategy = @result_strategy
         config.ignore_methods_from = nil
+        config.methods_whitelist = [:to_s]
       end
     end
 
@@ -144,6 +145,10 @@ describe Putter do
 
     it "ignores methods from the configured classes" do
       expect(Putter.configuration.ignore_methods_from).to eq([])
+    end
+
+    it "whitelists configure methods" do
+      expect(Putter.configuration.methods_whitelist).to eq([:to_s])
     end
 
     describe "#reset" do

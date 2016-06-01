@@ -23,6 +23,12 @@ RSpec.describe Putter::Configuration do
 
       expect(configuration.ignore_methods_from).to eq([Object])
     end
+
+    it "initializes methods_whitelist with []" do
+      configuration = Putter::Configuration.new
+
+      expect(configuration.methods_whitelist).to eq([])
+    end
   end
 
   describe "#ignore_methods_from" do
@@ -42,6 +48,26 @@ RSpec.describe Putter::Configuration do
       ::Putter.configuration.ignore_methods_from = [Object, Test]
 
       expect(::Putter.configuration.ignore_methods_from).to eq([Object, Test])
+    end
+  end
+
+  describe "#methods_whitelist" do
+    it "returns an empty array when methods_whitelist is nil" do
+      ::Putter.configuration.methods_whitelist = nil
+
+      expect(::Putter.configuration.methods_whitelist).to eq([])
+    end
+
+    it "returns an array when methods_whitelist is an object" do
+      ::Putter.configuration.methods_whitelist = Object
+
+      expect(::Putter.configuration.methods_whitelist).to eq([Object])
+    end
+
+    it "returns an array when methods_whitelist is an array" do
+      ::Putter.configuration.methods_whitelist = [Object, Test]
+
+      expect(::Putter.configuration.methods_whitelist).to eq([Object, Test])
     end
   end
 end
