@@ -91,6 +91,11 @@ Putter.configure do |config|
   # from those classes when adding methods to the proxy and adding debug output
   # Defaults to [Object]
   config.ignore_methods_from = [Object, ActiveRecord::Base]
+
+  # 'methods_whitelist' takes an array of methods and will always proxy and debug those methods
+  # regardless of whether or not the class is ignored and regardless of what methods are passed
+  # in when running 'Putter.follow'
+  config.methods_whitelist = [:to_s]
 end
 ```
 
@@ -100,7 +105,6 @@ Feel free to open a PR to implement any of these if they are not yet added:
 - Ability to watch any instance of a class calling a method
 - Active Record specific printing
 - Checking Rails.env to double check that putter is not called in production
-- Whitelist methods from ignored classes
 
 ## Contributing
 
