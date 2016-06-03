@@ -48,11 +48,8 @@ Service.do_stuff(object)
 Will output:
 
 ```bash
-Putter Debugging:  Object instance
------------------
-          Method:  :value
-            Args:  [:world, "!"]
-          Result:  "Hello world!"
+Putter Debugging: Object instance -- Method: :value, Args: [:world, "!"]
+          Result: "Hello world!"
 ```
 
 #### `Putter.follow` Options
@@ -60,8 +57,8 @@ Putter Debugging:  Object instance
 ```ruby
 Putter.follow(
   object_to_follow,
-  label: "My object"  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances,
-  methods: ["value"]  # If the value is nil, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
+  label: "My object",  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances
+  methods: ["value"],  # If the value is nil, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
 )
 ```
 

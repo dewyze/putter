@@ -75,7 +75,7 @@ describe Putter do
 
         expect do
           follower.test_method
-        end.to output(/\n.*Putter Debugging:.*custom label/).to_stdout
+        end.to output(/Putter Debugging: .*custom label/).to_stdout
       end
     end
   end

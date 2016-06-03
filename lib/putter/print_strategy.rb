@@ -3,15 +3,13 @@ require "colorize"
 module Putter
   module PrintStrategy
     MethodStrategy = Proc.new do |label, method, args|
-      puts
-      puts "\tPutter Debugging:  ".colorize(:cyan) + "#{label}".colorize(:green)
-      puts "\t-----------------".colorize(:cyan)
-      puts "\t\t  Method:  ".colorize(:cyan) + ":#{method}".colorize(:green)
-      puts "\t\t    Args:  ".colorize(:cyan) + "#{args}".colorize(:green)
+      prefix = "\tPutter Debugging: ".colorize(:cyan)
+      suffix = "#{label} -- Method: :#{method}, Args: #{args}".colorize(:green)
+      puts prefix + suffix
     end
 
     ResultStrategy = Proc.new do |result|
-      puts "\t\t  Result:  ".colorize(:cyan) + "#{result}".colorize(:green)
+      puts "\t          Result: ".colorize(:cyan) + "#{result}".colorize(:green)
     end
   end
 end
