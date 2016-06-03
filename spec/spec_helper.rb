@@ -9,10 +9,10 @@ module Putter
   module PrintStrategy
     Silent = Proc.new {}
     MethodTesting = Proc.new do |_, method, args|
-      puts "Method: :#{method}, Args: #{args}"
+      "Method: :#{method}, Args: #{args}"
     end
     ResultTesting = Proc.new do |result|
-      puts "Result: #{result}"
+      "Result: #{result}"
     end
   end
 end
