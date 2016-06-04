@@ -1,14 +1,12 @@
 module Putter
   class Configuration
-    attr_accessor :method_strategy, :print_results, :result_strategy
+    attr_accessor :print_strategy
     attr_writer :ignore_methods_from, :methods_whitelist
 
     def initialize
       @ignore_methods_from = [Object]
-      @method_strategy = PrintStrategy::MethodStrategy
+      @print_strategy = PrintStrategy::Default
       @methods_whitelist = []
-      @result_strategy = PrintStrategy::ResultStrategy
-      @print_results = true
     end
 
     def ignore_methods_from

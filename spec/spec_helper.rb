@@ -8,11 +8,8 @@ require "test_class"
 module Putter
   module PrintStrategy
     Silent = Proc.new {}
-    MethodTesting = Proc.new do |_, method, args|
-      "Method: :#{method}, Args: #{args}"
-    end
-    ResultTesting = Proc.new do |result|
-      "Result: #{result}"
+    Testing = Proc.new do |_, method, args, result|
+      puts "Method: :#{method}, Args: #{args}, Result: #{result}"
     end
   end
 end
@@ -21,9 +18,7 @@ RSpec.configure do |config|
   config.before(:each) do
     ::Putter.reset_configuration
     Putter.configure do |config|
-      config.method_strategy = Putter::PrintStrategy::Silent
-      config.result_strategy = Putter::PrintStrategy::Silent
-      config.print_results = false
+      config.print_strategy = Putter::PrintStrategy::Silent
     end
   end
 end

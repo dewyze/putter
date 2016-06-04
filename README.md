@@ -67,21 +67,13 @@ Putter currently has 3 configuration options:
 
 ```ruby
 Putter.configure do |config|
-  # 'method_strategy' takes a block that receives three arguments with the label, method, and args array,
-  # respectively. This block will be used after each method is called, "puts" statements can be used,
-  # or any other method callbacks that are helpful.
-  # Defaults to Putter::PrintStrategy::MethodStrategy
-  config.method_strategy = Proc.new do |label, method, args|
-    puts "Label: #{label}, Method: #{method}, Args: #{args}"
+  # 'method_strategy' takes a block that receives four arguments with the label, method, args array,
+  # and result respectively. This block will be used after each method is called, it must contain
+  # puts or logger calls, to print or any other method callbacks that are helpful.
+  # Defaults to Putter::PrintStrategy::Default
+  config.print_strategy = Proc.new do |label, method, args, result|
+    puts "Label: #{label}, Method: #{method}, Args: #{args}, Result: #{result}"
   end
-
-  # 'result_strategy' takes a block that receives a single argument outputs the results of the method call
-  # Defaults to Putter::PrintStrategy::ResultStrategy
-  config.result_strategy = Proc.new {|result| puts "The result was #{result}" }
-
-  # 'print_results' determines whether or not to print the results block at all.
-  # Defaults to true.
-  config.print_results = false
 
   # 'ignore_methods_from' takes an array of class names and will ignore both class and instance methods
   # from those classes when adding methods to the proxy and adding debug output

@@ -122,8 +122,8 @@ describe Putter::Follower do
       end
 
       it "prints the method and args using the configured strategy" do
-        Putter.configuration.method_strategy = Proc.new do |_, method, args|
-          puts "Method: :#{method}, Args: #{args}"
+        Putter.configuration.print_strategy = Proc.new do |_, method, args, result|
+          puts "Method: :#{method}, Args: #{args}, Result: #{result}"
         end
 
         follower = get_follower(subject)
@@ -201,7 +201,7 @@ describe Putter::Follower do
       test = Test.new
       follower = Putter::Follower.new(test)
 
-      Putter.configuration.method_strategy = Proc.new do |label|
+      Putter.configuration.print_strategy = Proc.new do |label|
         puts "Label: #{label}"
       end
 
@@ -251,7 +251,7 @@ describe Putter::Follower do
       end
       follower = Putter::Follower.new(TestClass1)
 
-      Putter.configuration.method_strategy = Proc.new do |label|
+      Putter.configuration.print_strategy = Proc.new do |label|
         puts "Label: #{label}"
       end
 
@@ -269,6 +269,17 @@ describe Putter::Follower do
       expect(hash).to receive(:to_json)
 
       follower.to_json
+    end
+  end
+
+  describe "#add_method" do
+    it "does not print newlines if there is nothing to print" do
+      test = Test.new
+      follower = get_follower(test)
+
+      expect do
+        follower.test_method
+      end.to_not output.to_stdout
     end
   end
 end

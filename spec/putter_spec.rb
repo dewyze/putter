@@ -18,7 +18,7 @@ describe Putter do
       end
 
       it "accepts specific methods" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
+        Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
         follower = Putter.follow(subject, methods: [:test_method_arg])
 
         expect do
@@ -27,7 +27,7 @@ describe Putter do
       end
 
       it "ignores unspecified methods" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
+        Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
         follower = Putter.follow(subject, methods: [:test_method])
 
         expect do
@@ -35,42 +35,18 @@ describe Putter do
         end.to_not output(/:test_method_arg/).to_stdout
       end
 
-      it "prints debugging info for method calls" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodTesting
+      it "prints debugging info" do
+        Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
         follower = Putter.follow(subject)
 
         expect do
           follower.test_method
-          follower.test_method_arg("World")
-        end.to output(/Method: :test_method, Args: \[\]\nMethod: :test_method_arg, Args: \["World"\]/m).to_stdout
-      end
-
-      it "prints the debugging info for results" do
-        Putter.configure do |config|
-          config.result_strategy = Putter::PrintStrategy::ResultTesting
-          config.print_results = true
-        end
-        follower = Putter.follow(subject)
-
-        expect do
-          follower.test_method
-        end.to output(/Result: Hello World!/).to_stdout
-      end
-
-      it "does not print debugging info if print results is false" do
-        Putter.configure do |config|
-          config.result_strategy = Putter::PrintStrategy::ResultTesting
-          config.print_results = false
-        end
-        follower = Putter.follow(subject)
-
-        expect do
-          follower.test_method
-        end.to_not output(/Result: Hello World!/).to_stdout
+          follower.test_method_arg("earth")
+        end.to output(/Method: :test_method, Args: \[\], Result: Hello World!\nMethod: :test_method_arg, Args: \["earth"\], Result: Hello earth!/m).to_stdout
       end
 
       it "prints the label option if it is present" do
-        Putter.configuration.method_strategy = Putter::PrintStrategy::MethodStrategy
+        Putter.configuration.print_strategy = Putter::PrintStrategy::Default
         follower = Putter.follow(subject, label: "custom label")
 
         expect do
@@ -115,32 +91,19 @@ describe Putter do
 
   describe "configuration" do
     before(:each) do
-      @method_strategy = Proc.new do |obj, method, args|
-        puts "Obj: #{obj}, Method: #{method}, Args: #{args}"
-      end
-      @result_strategy = Proc.new do |result|
-        puts "Result: #{result}"
+      @print_strategy = Proc.new do |obj, method, args, result|
+        puts "Obj: #{obj}, Method: #{method}, Args: #{args}, Result: #{result}"
       end
 
       Putter.configure do |config|
-        config.print_results = false
-        config.method_strategy = @method_strategy
-        config.result_strategy = @result_strategy
+        config.print_strategy = @print_strategy
         config.ignore_methods_from = nil
         config.methods_whitelist = [:to_s]
       end
     end
 
-    it "does not print results" do
-      expect(Putter.configuration.print_results).to be false
-    end
-
     it "prints method calls with the configured strategy" do
-      expect(Putter.configuration.method_strategy).to eq(@method_strategy)
-    end
-
-    it "prints results with the configured strategy" do
-      expect(Putter.configuration.result_strategy).to eq(@result_strategy)
+      expect(Putter.configuration.print_strategy).to eq(@print_strategy)
     end
 
     it "ignores methods from the configured classes" do
@@ -155,9 +118,7 @@ describe Putter do
       it "resets the configuration" do
         Putter.reset_configuration
 
-        expect(Putter.configuration.print_results).to be true
-        expect(Putter.configuration.method_strategy).to eq(Putter::PrintStrategy::MethodStrategy)
-        expect(Putter.configuration.result_strategy).to eq(Putter::PrintStrategy::ResultStrategy)
+        expect(Putter.configuration.print_strategy).to eq(Putter::PrintStrategy::Default)
       end
     end
   end

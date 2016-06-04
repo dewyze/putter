@@ -26,12 +26,11 @@ module Putter
     end
 
     def add_method(method)
-      @proxy.instance_exec(@label, _print_results?) do |label, print_results|
+      @proxy.instance_exec(@label) do |label, print_results|
         define_method(method) do |*proxy_args, &blk|
-          output = "#{::Putter.configuration.method_strategy.call label, method, proxy_args}"
+          args_string = proxy_args.to_s
           result = super *proxy_args, &blk
-          output += ", #{::Putter.configuration.result_strategy.call result}" if print_results
-          puts output unless output.nil? || output == ""
+          ::Putter.configuration.print_strategy.call label, method, args_string, result
           result
         end
       end
@@ -64,10 +63,6 @@ module Putter
       else
         @label = @object.class.name + " instance"
       end
-    end
-
-    def _print_results?
-      ::Putter.configuration.print_results
     end
 
     def _set_methods(methods)
