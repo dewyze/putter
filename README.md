@@ -48,7 +48,7 @@ Service.do_stuff(object)
 Will output:
 
 ```bash
-Putter Debugging: Object instance -- Method: :value, Args: [:world, "!"], Result: "Hello world!"
+Putter Debugging: Object instance -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
 ```
 
 #### `Putter.follow` Options
@@ -67,7 +67,7 @@ Putter currently has 3 configuration options:
 
 ```ruby
 Putter.configure do |config|
-  # 'method_strategy' takes a block that receives four arguments with the label, method, args array,
+  # 'print_strategy' takes a block that receives four arguments with the label, method, args array,
   # and result respectively. This block will be used after each method is called, it must contain
   # puts or logger calls, to print or any other method callbacks that are helpful.
   # Defaults to Putter::PrintStrategy::Default
