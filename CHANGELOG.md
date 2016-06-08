@@ -1,5 +1,8 @@
 # CHANGELOG
 
+### 0.2.1 - 2016-06-08
+- Add missing Gemfile.lock to bundled gem.
+
 ### 0.2.0 - 2016-06-04
 - Convert print strategies to a single print strategy for both methods calls and results and adjust configuration accordingly.
 
