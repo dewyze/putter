@@ -8,7 +8,7 @@ require "test_class"
 module Putter
   module PrintStrategy
     Silent = Proc.new {}
-    Testing = Proc.new do |_, method, args, result|
+    Testing = Proc.new do |_, line, method, args, result|
       puts "Method: :#{method}, Args: #{args}, Result: #{result}"
     end
   end

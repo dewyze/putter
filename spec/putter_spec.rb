@@ -53,6 +53,15 @@ describe Putter do
           follower.test_method
         end.to output(/Putter Debugging: .*custom label/).to_stdout
       end
+
+      it "prints the line and number" do
+        Putter.configuration.print_strategy = Putter::PrintStrategy::Default
+        follower = Putter.follow(subject)
+
+        expect do
+          follower.test_method
+        end.to output(/Putter Debugging: .*#{__FILE__}:#{__LINE__ - 1}.* Method:/).to_stdout
+      end
     end
   end
 

@@ -48,7 +48,7 @@ Service.do_stuff(object)
 Will output:
 
 ```bash
-Putter Debugging: Object instance -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
+Putter Debugging: Object instance /home/johndoe/putter/README.md:51 -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
 ```
 
 #### `Putter.follow` Options
@@ -67,12 +67,13 @@ Putter currently has 3 configuration options:
 
 ```ruby
 Putter.configure do |config|
-  # 'print_strategy' takes a block that receives four arguments with the label, method, args array,
-  # and result respectively. This block will be used after each method is called, it must contain
-  # puts or logger calls, to print or any other method callbacks that are helpful.
+  # 'print_strategy' takes a block that receives five arguments with the label, line,
+  # method, args array, and result respectively. This block will be used after each method
+  # is called, it must contain puts or logger calls, to print or any other method callbacks
+  # that are helpful.
   # Defaults to Putter::PrintStrategy::Default
-  config.print_strategy = Proc.new do |label, method, args, result|
-    puts "Label: #{label}, Method: #{method}, Args: #{args}, Result: #{result}"
+  config.print_strategy = Proc.new do |label, line, method, args, result|
+    puts "#{line} - Label: #{label}, Method: #{method}, Args: #{args}, Result: #{result}"
   end
 
   # 'ignore_methods_from' takes an array of class names and will ignore both class and instance methods

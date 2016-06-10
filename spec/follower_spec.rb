@@ -121,8 +121,22 @@ describe Putter::Follower do
         follower.add_method(:test_method)
       end
 
+      it "prints the line with number" do
+        Putter.configuration.print_strategy = Proc.new do |_, line|
+          puts "Line: #{line}"
+        end
+
+        follower = get_follower(subject)
+
+        file = __FILE__
+        expected_line = __LINE__
+        expect do
+          follower.test_method_arg("world")
+        end.to output(/^Line: #{file}:#{expected_line + 2}:in `block/).to_stdout
+      end
+
       it "prints the method and args using the configured strategy" do
-        Putter.configuration.print_strategy = Proc.new do |_, method, args, result|
+        Putter.configuration.print_strategy = Proc.new do |_, _, method, args, result|
           puts "Method: :#{method}, Args: #{args}, Result: #{result}"
         end
 
@@ -244,7 +258,7 @@ describe Putter::Follower do
       expect(presence).to be false
     end
 
-    it "returns the correct label for instances" do
+    it "returns the correct label for classes" do
       class TestClass1
         def self.test_method
         end
