@@ -58,9 +58,11 @@ describe Putter do
         Putter.configuration.print_strategy = Putter::PrintStrategy::Default
         follower = Putter.follow(subject)
 
+        file = __FILE__
+        file = file.split(::Dir.pwd)[1]
         expect do
           follower.test_method
-        end.to output(/Putter Debugging: .*#{__FILE__}:#{__LINE__ - 1}.* Method:/).to_stdout
+        end.to output(/Putter Debugging: .*\.#{file}:#{__LINE__ - 1}.* Method:/).to_stdout
       end
     end
   end

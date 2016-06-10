@@ -48,7 +48,7 @@ Service.do_stuff(object)
 Will output:
 
 ```bash
-Putter Debugging: Object instance /home/johndoe/putter/README.md:51 -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
+Putter Debugging: Object instance ./putter/README.md:51 -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
 ```
 
 #### `Putter.follow` Options

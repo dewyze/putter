@@ -121,18 +121,19 @@ describe Putter::Follower do
         follower.add_method(:test_method)
       end
 
-      it "prints the line with number" do
+      it "prints the line without the directory with number" do
         Putter.configuration.print_strategy = Proc.new do |_, line|
-          puts "Line: #{line}"
+          puts "Line: .#{line}"
         end
 
         follower = get_follower(subject)
 
         file = __FILE__
+        file = file.split(::Dir.pwd)[1]
         expected_line = __LINE__
         expect do
           follower.test_method_arg("world")
-        end.to output(/^Line: #{file}:#{expected_line + 2}:in `block/).to_stdout
+        end.to output(/^Line: \.#{file}:#{expected_line + 2}:in `block/).to_stdout
       end
 
       it "prints the method and args using the configured strategy" do

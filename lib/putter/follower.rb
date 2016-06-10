@@ -30,6 +30,7 @@ module Putter
       @proxy.instance_exec(@label, STACK_TRACE_IGNORE_REGEX) do |label, regex|
         define_method(method) do |*proxy_args, &blk|
           line = caller.find {|call| call.match(regex)}
+          line = line.split(::Dir.pwd)[1]
           args_string = proxy_args.to_s
           result = super *proxy_args, &blk
           ::Putter.configuration.print_strategy.call label, line, method, args_string, result
