@@ -8,7 +8,7 @@ require "test_class"
 module Putter
   module PrintStrategy
     Silent = Proc.new {}
-    Testing = Proc.new do |_, line, method, args, result|
+    Testing = Proc.new do |_, _, method, args, result|
       puts "Method: :#{method}, Args: #{args}, Result: #{result}"
     end
   end
@@ -25,4 +25,8 @@ end
 
 def get_follower(obj)
   follower = Putter::Follower.new(obj)
+end
+
+def set_testing_print_strategy
+  Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
 end

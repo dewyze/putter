@@ -296,6 +296,6 @@ describe Putter::Follower do
         follower.test_method
       end.to_not output.to_stdout
     end
+
   end
 end
-
