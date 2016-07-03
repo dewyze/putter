@@ -1,6 +1,5 @@
 module Putter
   class Follower < BasicObject
-    STACK_TRACE_IGNORE_REGEX = /(?!.*(\.rbenv|\.rvm|putter\/lib\/putter\/follower))(^.*$)/
     attr_reader :object, :proxied_methods, :proxy
 
     def initialize(obj, options={})
@@ -27,13 +26,15 @@ module Putter
     end
 
     def add_method(method)
-      @proxy.instance_exec(@label, STACK_TRACE_IGNORE_REGEX) do |label, regex|
-        define_method(method) do |*proxy_args, &blk|
-          line = caller.find {|call| call.match(regex)}
+      data = ProxyMethodData.new(method, @label)
+
+      @proxy.instance_exec(data) do |data|
+        define_method(data.method) do |*proxy_args, &blk|
+          line = caller.find {|call| call.match(data.stack_trace_ignore_regex)}
           line = line.split(::Dir.pwd)[1]
           args_string = proxy_args.to_s
           result = super *proxy_args, &blk
-          ::Putter.configuration.print_strategy.call label, line, method, args_string, result
+          ::Putter.configuration.print_strategy.call data.label, line, method, args_string, result
           result
         end
       end
