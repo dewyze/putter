@@ -1,5 +1,6 @@
 require "putter/configuration"
 require "putter/errors"
+require "putter/method_creator"
 require "putter/method_proxy"
 require "putter/print_strategy"
 require "putter/proxy_method_data"
