@@ -1,6 +1,6 @@
 module Putter
   class ProxyMethodData
-    STACK_TRACE_IGNORE_REGEX = /(?!.*(\.rbenv|\.rvm|putter\/lib\/putter\/follower))(^.*$)/
+    STACK_TRACE_IGNORE_REGEX = /(?!.*(\.rbenv|\.rvm|\/lib\/putter\/follower))(^.*$)/
 
     attr_reader :method, :label
 
