@@ -11,58 +11,15 @@ describe Putter do
         expect(follower.object).to eq(subject)
       end
 
-      it "creates a method proxy" do
-        follower = Putter.follow(subject)
+      it "passes options" do
+        options = {
+          label: "My label",
+          methods: [:to_s],
+        }
 
-        expect(subject.singleton_class.ancestors.first).to be_an_instance_of(Putter::MethodProxy)
-      end
+        expect(Putter::Follower).to receive(:new).with(subject, options)
 
-      it "accepts specific methods" do
-        Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
-        follower = Putter.follow(subject, methods: [:test_method_arg])
-
-        expect do
-          follower.test_method_arg("World")
-        end.to output(/Method: :test_method_arg, Args: \["World"\]/).to_stdout
-      end
-
-      it "ignores unspecified methods" do
-        Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
-        follower = Putter.follow(subject, methods: [:test_method])
-
-        expect do
-          follower.test_method_arg("World")
-        end.to_not output(/:test_method_arg/).to_stdout
-      end
-
-      it "prints debugging info" do
-        Putter.configuration.print_strategy = Putter::PrintStrategy::Testing
-        follower = Putter.follow(subject)
-
-        expect do
-          follower.test_method
-          follower.test_method_arg("earth")
-        end.to output(/Method: :test_method, Args: \[\], Result: Hello World!\nMethod: :test_method_arg, Args: \["earth"\], Result: Hello earth!/m).to_stdout
-      end
-
-      it "prints the label option if it is present" do
-        Putter.configuration.print_strategy = Putter::PrintStrategy::Default
-        follower = Putter.follow(subject, label: "custom label")
-
-        expect do
-          follower.test_method
-        end.to output(/Putter Debugging: .*custom label/).to_stdout
-      end
-
-      it "prints the line and number" do
-        Putter.configuration.print_strategy = Putter::PrintStrategy::Default
-        follower = Putter.follow(subject)
-
-        file = __FILE__
-        file = file.split(::Dir.pwd)[1]
-        expect do
-          follower.test_method
-        end.to output(/Putter Debugging: .*\.#{file}:#{__LINE__ - 1}.* Method:/).to_stdout
+        Putter.follow(subject, options)
       end
     end
   end
