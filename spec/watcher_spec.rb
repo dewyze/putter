@@ -21,6 +21,36 @@ describe Putter::Watcher do
     expect(subject.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
   end
 
+  it "does not log methods from configuration.ignore_methods_from" do
+    set_testing_print_strategy
+    Putter.configuration.ignore_methods_from = [Object]
+    Putter::Watcher.watch(subject)
+
+    expect{subject.to_s}.to_not output.to_stdout
+  end
+
+  it "does log methods if configuration.ignore_methods_from is empty" do
+    Putter.configuration.print_strategy = Proc.new do |_, _, method|
+      puts "Method: :#{method}"
+    end
+
+    Putter.configuration.ignore_methods_from = []
+    Putter::Watcher.watch(subject)
+
+    expect{subject.to_s}.to output("Method: :to_s\n").to_stdout
+  end
+
+  it "does log methods in the methods whitelist" do
+    Putter.configuration.print_strategy = Proc.new do |_, _, method|
+      puts "Method: :#{method}"
+    end
+
+    Putter.configuration.methods_whitelist = [:to_s]
+    Putter::Watcher.watch(subject)
+
+    expect{subject.to_s}.to output("Method: :to_s\n").to_stdout
+  end
+
   it "adds methods to the proxy" do
     Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
       puts "Method: :#{method}, Args: #{args}"

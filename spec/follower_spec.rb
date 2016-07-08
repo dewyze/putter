@@ -84,7 +84,8 @@ describe Putter::Follower do
         follower.test_method
       end
 
-      it "does not add Object methods" do
+      it "does not add methods from configuration.ignore_methods_from" do
+        Putter.configuration.ignore_methods_from = [Object]
         follower = get_follower(subject)
 
         follower.to_s
@@ -92,7 +93,17 @@ describe Putter::Follower do
         expect(follower.proxy.instance_methods).to_not include(:to_s)
       end
 
+      it "does add methods if configuration.ignore_methods_from is empty" do
+        Putter.configuration.ignore_methods_from = []
+        follower = get_follower(subject)
+
+        follower.to_s
+
+        expect(follower.proxy.instance_methods).to include(:to_s)
+      end
+
       it "adds whitelist methods" do
+        Putter.configuration.ignore_methods_from = [Object]
         ::Putter.configuration.methods_whitelist = [:to_s]
         follower = get_follower(subject)
 
