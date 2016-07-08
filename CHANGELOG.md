@@ -1,4 +1,6 @@
 # CHANGELOG
+### 0.3.0 - 2016-07-08
+- Add `Putter.watch` ability to watch a class and instances created by that class
 
 ### 0.2.1 - 2016-06-08
 - Add missing Gemfile.lock to bundled gem.
