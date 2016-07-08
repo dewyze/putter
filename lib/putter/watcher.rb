@@ -5,7 +5,7 @@ module Putter
     @label = ""
 
     def self.watch(obj, options={})
-      Watcher.label = obj.name
+      _set_label(options[:label], obj.name)
 
       class << obj
         prepend InstanceFollower
@@ -40,6 +40,14 @@ module Putter
 
     def self.label=(label)
       @label = label
+    end
+
+    def self._set_label(label, class_name)
+      if !label.nil? && label != ""
+        @label = label
+      else
+        @label = class_name
+      end
     end
   end
 end

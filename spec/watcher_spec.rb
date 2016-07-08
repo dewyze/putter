@@ -70,7 +70,7 @@ describe Putter::Watcher do
     end.to_not raise_error(/super: no superclass method `test_class_method'/)
   end
 
-  it "prints the class name as the label" do
+  it "prints the class name as the label if it is not set" do
     class ClassName
       def self.test_method
         "test_method"
@@ -86,6 +86,18 @@ describe Putter::Watcher do
     expect do
       ClassName.test_method
     end.to output("Label: ClassName\n").to_stdout
+  end
+
+  it "prints the label if it is passed in" do
+    Putter.configuration.print_strategy = Proc.new do |label|
+      puts "Label: #{label}"
+    end
+
+    Putter::Watcher.watch(subject, { label: "my label" })
+
+    expect do
+      subject.test_class_method
+    end.to output("Label: my label\n").to_stdout
   end
 
   it "prints the line without the directory with number" do
