@@ -31,7 +31,7 @@ module Putter
         ignored_methods += klass.methods
       end
 
-      klass.instance_methods - ignored_methods + Putter.configuration.methods_whitelist.map(&:to_sym)
+      klass.instance_methods - ignored_methods + Putter.configuration.methods_whitelist.map(&:to_sym) + [:new]
     end
 
     def self.label

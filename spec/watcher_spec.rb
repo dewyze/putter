@@ -51,6 +51,16 @@ describe Putter::Watcher do
     expect{subject.to_s}.to output("Method: :to_s\n").to_stdout
   end
 
+  it "logs the 'new' method" do
+    Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
+      puts "Method: :#{method}, Args: #{args}"
+    end
+
+    Putter::Watcher.watch(subject)
+
+    expect{subject.new}.to output("Method: :new, Args: []\n").to_stdout
+  end
+
   it "adds methods to the proxy" do
     Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
       puts "Method: :#{method}, Args: #{args}"
