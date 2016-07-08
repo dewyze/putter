@@ -18,13 +18,26 @@ describe Putter::Watcher do
   it "prepends a proxy" do
     Putter::Watcher.watch(subject)
 
-    expect(subject.ancestors[0]).to eq(Putter::ClassProxy)
+    expect(subject.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
   end
 
   it "adds methods to the proxy" do
+    Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
+      puts "Method: :#{method}, Args: #{args}"
+    end
     Putter::Watcher.watch(subject)
 
-    expect(subject.ancestors[0]::ClassMethods.instance_methods).to include(:test_class_method, :test_class_method_arg)
+    expect(subject.ancestors[0].methods).to include(:test_class_method, :test_class_method_arg)
+  end
+
+  it "does not call other watched classes" do
+    kls = Class.new
+    Putter::Watcher.watch(subject)
+    Putter::Watcher.watch(kls)
+
+    expect do
+      kls.test_class_method
+    end.to_not raise_error(/super: no superclass method `test_class_method'/)
   end
 
   it "prints the line without the directory with number" do
@@ -68,12 +81,12 @@ describe Putter::Watcher do
 
   it "follows created instances" do
     Putter.configuration.print_strategy = Proc.new do |label, line, method, args, result|
-      puts "Label: #{label}"
+      puts "Label: #{label}, Method: #{method}"
     end
 
     Putter::Watcher.watch(subject)
     [subject.new, subject.new].each do |instance|
-      expect(instance.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
+      # expect(instance.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
     end
   end
 end

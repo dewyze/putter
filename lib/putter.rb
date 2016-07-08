@@ -1,14 +1,14 @@
 require "putter/configuration"
 require "putter/errors"
+require "putter/instance_follower"
 require "putter/method_creator"
-require "putter/class_proxy"
 require "putter/method_proxy"
 require "putter/print_strategy"
 require "putter/proxy_method_data"
 require "putter/version"
-require "putter/watcher"
 
 require "putter/follower"
+require "putter/watcher"
 
 module Putter
   include Errors
