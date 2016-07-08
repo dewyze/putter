@@ -70,6 +70,24 @@ describe Putter::Watcher do
     end.to_not raise_error(/super: no superclass method `test_class_method'/)
   end
 
+  it "prints the class name as the label" do
+    class ClassName
+      def self.test_method
+        "test_method"
+      end
+    end
+
+    Putter.configuration.print_strategy = Proc.new do |label|
+      puts "Label: #{label}"
+    end
+
+    Putter::Watcher.watch(ClassName)
+
+    expect do
+      ClassName.test_method
+    end.to output("Label: ClassName\n").to_stdout
+  end
+
   it "prints the line without the directory with number" do
     Putter.configuration.print_strategy = Proc.new do |_, line|
       puts "Line: .#{line}"
@@ -82,7 +100,7 @@ describe Putter::Watcher do
     expected_line = __LINE__
     expect do
       subject.test_class_method
-    end.to output(/^Line: \.#{file}:#{expected_line + 2}:in `block/).to_stdout
+    end.to output(/Line: \.#{file}:#{expected_line + 2}:in `block/).to_stdout
   end
 
   it "prints the method and args using the configured strategy" do
@@ -94,7 +112,7 @@ describe Putter::Watcher do
 
     expect do
       subject.test_class_method_arg("world")
-    end.to output(/Method: :test_class_method_arg, Args: \["world"\]/).to_stdout
+    end.to output("Method: :test_class_method_arg, Args: [\"world\"]\n").to_stdout
   end
 
   it "prints the method and args using the configured strategy" do

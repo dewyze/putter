@@ -2,7 +2,11 @@ module Putter
   class Watcher
     extend MethodCreator
 
+    @label = ""
+
     def self.watch(obj, options={})
+      Watcher.label = obj.name
+
       class << obj
         prepend InstanceFollower
         prepend Putter::Watcher.class_proxy(self)
@@ -13,7 +17,7 @@ module Putter
       proxy = MethodProxy.new
 
       methods_to_proxy(klass).each do |method|
-        data = ProxyMethodData.new(method, "label")
+        data = ProxyMethodData.new(method, label)
         add_putter_method_to_proxy(proxy, :module_exec, data)
       end
 
@@ -28,6 +32,14 @@ module Putter
       end
 
       klass.instance_methods - ignored_methods + Putter.configuration.methods_whitelist.map(&:to_sym)
+    end
+
+    def self.label
+      @label
+    end
+
+    def self.label=(label)
+      @label = label
     end
   end
 end
