@@ -24,9 +24,15 @@ Or install it yourself as:
 
 ## Usage
 
+There are two ways to use putter. `Putter.follow` and `Putter.watch`.
+
 ### Putter.follow
 
-Currently there is only one use for Putter, the `follow` method.
+`Putter.follow` will allow you to create a wrapper around an object and then you can pass that wrapped object around. The advantage to using follow is that if a method is called that doesn't exist, or a method is created at runtime, the wrapped object will intercept those calls. This works on both instances and classes. However, following a class will not result in created instances of that class being followed.
+
+Additionally, following an object will not allow you to intercept calls to a class that occurred outside the wrapped object. For that functionality, use `Putter.watch`
+
+`Putter.follow` usage:
 
 ```ruby
 class MyObject
@@ -48,7 +54,7 @@ Service.do_stuff(object)
 Will output:
 
 ```bash
-Putter Debugging: Object instance ./putter/README.md:51 -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
+Putter Debugging: Object instance ./putter/README.md:57 -- Method: :hello, Args: [:world, "!"], Result: "Hello world!"
 ```
 
 #### `Putter.follow` Options
@@ -58,6 +64,45 @@ Putter.follow(
   object_to_follow,
   label: "My object",  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances
   methods: ["value"],  # If the value is nil, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
+)
+```
+
+### Putter.watch
+
+`Putter.watch` can be used on classes to follow created instances of the class or to intercept method calls that occur throughout your application.
+
+`Putter.follow` usage:
+
+```ruby
+class MyObject
+  def self.hello_class(arg, punc)
+    "The class says hello #{arg.to_s}#{punc}"
+  end
+
+  def hello_instance(arg, punc)
+    "An instance says hello #{arg.to_s}#{punc}"
+  end
+end
+
+Putter.watch(MyObject)
+MyObject.hello_class("world", "!")
+my_obj = MyObject.new
+my_obj.hello_instance("world", "!")
+```
+
+Will output:
+
+```bash
+Putter Debugging: Object ./putter/README.md:96 -- Method: :hello_class, Args: [:world, "!"], Result: "The class says hello world!"
+Putter Debugging: Object instance 1 ./putter/README.md:97 -- Method: :hello_instance, Args: [:world, "!"], Result: "The instance says hello world!"
+```
+
+#### `Putter.follow` Options
+
+```ruby
+Putter.watch(
+  ClassToFollow,
+  label: "My object",  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance #" for instances
 )
 ```
 
@@ -91,7 +136,6 @@ end
 ## Planned Features
 Feel free to open a PR to implement any of these if they are not yet added:
 
-- Ability to watch any instance of a class calling a method
 - Active Record specific printing
 - Checking Rails.env to double check that putter is not called in production
 
