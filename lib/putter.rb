@@ -21,6 +21,10 @@ module Putter
     Putter::Follower.new(obj, options)
   end
 
+  def self.watch(obj, options={})
+    Putter::Watcher.watch(obj, options)
+  end
+
   def self.configuration
     @configuration ||= Configuration.new
   end

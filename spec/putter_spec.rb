@@ -100,6 +100,15 @@ describe Putter do
     end
   end
 
+  describe "#watch" do
+    it "calls Watcher to watch a class" do
+      klass = Class.new
+      expect(Putter::Watcher).to receive(:watch)
+
+      Putter.watch(klass)
+    end
+  end
+
   describe "configuration" do
     before(:each) do
       @print_strategy = Proc.new do |obj, method, args, result|
