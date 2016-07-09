@@ -24,7 +24,7 @@ Or install it yourself as:
 
 There are two ways to use putter. `Putter.follow` and `Putter.watch`.
 
-### Putter.follow
+### `Putter.follow`
 
 `Putter.follow` will allow you to create a wrapper around an object and then you can pass that wrapped object around. The advantage to using follow is that if a method is called that doesn't exist, or a method is created at runtime, the wrapped object will intercept those calls. This works on both instances and classes. However, following a class will not result in created instances of that class being followed.
 
@@ -65,11 +65,11 @@ Putter.follow(
 )
 ```
 
-### Putter.watch
+### `Putter.watch`
 
 `Putter.watch` can be used on classes to follow created instances of the class or to intercept method calls that occur throughout your application.
 
-`Putter.follow` usage:
+`Putter.watch` usage:
 
 ```ruby
 class MyObject
@@ -99,7 +99,7 @@ Putter Debugging: Object instance 1 ./putter/README.md:97 -- Method: :hello_inst
 
 ```ruby
 Putter.watch(
-  ClassToFollow,
+  ClassToWatch,
   label: "My object",  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance #" for instances
 )
 ```
