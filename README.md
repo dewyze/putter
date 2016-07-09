@@ -95,7 +95,7 @@ Putter Debugging: Object ./putter/README.md:96 -- Method: :hello_class, Args: [:
 Putter Debugging: Object instance 1 ./putter/README.md:97 -- Method: :hello_instance, Args: [:world, "!"], Result: "The instance says hello world!"
 ```
 
-#### `Putter.follow` Options
+#### `Putter.watch` Options
 
 ```ruby
 Putter.watch(
