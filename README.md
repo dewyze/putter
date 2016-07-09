@@ -4,8 +4,6 @@ It rhymes with gooder, not gutter.
 
 Putter is a tool for more easily implementing puts debugging. Instead of littering files with various puts statements, you can wrap an object with a follower and print out anytime a method is called on that object. This will follow the object throughout its path in the stack.
 
-For now Putter can only follow a specific the speficic object that it wraps. It currently does not watch a class to see what objects were passed to it unless that specific instance of the class is passed through the stack.
-
 ## Installation
 
 Add this line to your application's Gemfile:
