@@ -17,7 +17,7 @@ module Putter
       proxy = MethodProxy.new
 
       methods_to_proxy(klass).each do |method|
-        data = ProxyMethodData.new(method, label)
+        data = ProxyMethodData.new({ label: label, method: method })
         add_putter_method_to_proxy(proxy, :module_exec, data)
       end
 

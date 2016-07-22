@@ -30,8 +30,8 @@ describe Putter::Watcher do
   end
 
   it "does log methods if configuration.ignore_methods_from is empty" do
-    Putter.configuration.print_strategy = Proc.new do |_, _, method|
-      puts "Method: :#{method}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Method: :#{data.method}"
     end
 
     Putter.configuration.ignore_methods_from = []
@@ -41,8 +41,8 @@ describe Putter::Watcher do
   end
 
   it "does log methods in the methods whitelist" do
-    Putter.configuration.print_strategy = Proc.new do |_, _, method|
-      puts "Method: :#{method}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Method: :#{data.method}"
     end
 
     Putter.configuration.methods_whitelist = [:to_s]
@@ -52,8 +52,8 @@ describe Putter::Watcher do
   end
 
   it "logs the 'new' method" do
-    Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
-      puts "Method: :#{method}, Args: #{args}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Method: :#{data.method}, Args: #{data.args}"
     end
 
     Putter::Watcher.watch(subject)
@@ -62,8 +62,8 @@ describe Putter::Watcher do
   end
 
   it "adds methods to the proxy" do
-    Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
-      puts "Method: :#{method}, Args: #{args}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Method: :#{data.method}, Args: #{data.args}"
     end
     Putter::Watcher.watch(subject)
 
@@ -87,8 +87,8 @@ describe Putter::Watcher do
       end
     end
 
-    Putter.configuration.print_strategy = Proc.new do |label|
-      puts "Label: #{label}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Label: #{data.label}"
     end
 
     Putter::Watcher.watch(ClassName)
@@ -99,8 +99,8 @@ describe Putter::Watcher do
   end
 
   it "prints the label if it is passed in" do
-    Putter.configuration.print_strategy = Proc.new do |label|
-      puts "Label: #{label}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Label: #{data.label}"
     end
 
     Putter::Watcher.watch(subject, { label: "my label" })
@@ -111,8 +111,8 @@ describe Putter::Watcher do
   end
 
   it "prints the line without the directory with number" do
-    Putter.configuration.print_strategy = Proc.new do |_, line|
-      puts "Line: .#{line}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Line: .#{data.line}"
     end
 
     Putter::Watcher.watch(subject)
@@ -126,8 +126,8 @@ describe Putter::Watcher do
   end
 
   it "prints the method and args using the configured strategy" do
-    Putter.configuration.print_strategy = Proc.new do |_, _, method, args|
-      puts "Method: :#{method}, Args: #{args}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Method: :#{data.method}, Args: #{data.args}"
     end
 
     Putter::Watcher.watch(subject)
@@ -138,8 +138,8 @@ describe Putter::Watcher do
   end
 
   it "prints the method and args using the configured strategy" do
-    Putter.configuration.print_strategy = Proc.new do |_, _, _, _, result|
-      puts "Result: #{result}"
+    Putter.configuration.print_strategy = Proc.new do |data|
+      puts "Result: #{data.result}"
     end
 
     Putter::Watcher.watch(subject)
@@ -150,13 +150,9 @@ describe Putter::Watcher do
   end
 
   it "follows created instances" do
-    Putter.configuration.print_strategy = Proc.new do |label, line, method, args, result|
-      puts "Label: #{label}, Method: #{method}"
-    end
-
     Putter::Watcher.watch(subject)
     [subject.new, subject.new].each do |instance|
-      # expect(instance.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
+      expect(instance.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
     end
   end
 end

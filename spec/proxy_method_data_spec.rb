@@ -1,16 +1,14 @@
 describe Putter::ProxyMethodData do
-  it "holds the method and label" do
-    data = Putter::ProxyMethodData.new(:test_method, "my label")
+  before(:each) do
+    @data = Putter::ProxyMethodData.new({ label: "my label", method: :test_method })
+  end
 
-    expect(data.method).to eq(:test_method)
-    expect(data.label).to eq("my label")
+  it "holds the method and label" do
+    expect(@data.method).to eq(:test_method)
+    expect(@data.label).to eq("my label")
   end
 
   context "stack trace regex" do
-    before(:each) do
-      @data = Putter::ProxyMethodData.new(:test_method, "my label")
-    end
-
     it "rejects rvm stack traces" do
       expect(".rvm").to_not match(@data.stack_trace_ignore_regex)
     end

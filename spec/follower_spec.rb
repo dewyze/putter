@@ -133,8 +133,8 @@ describe Putter::Follower do
       end
 
       it "prints the line without the directory with number" do
-        Putter.configuration.print_strategy = Proc.new do |_, line|
-          puts "Line: .#{line}"
+        Putter.configuration.print_strategy = Proc.new do |data|
+          puts "Line: .#{data.line}"
         end
 
         follower = get_follower(subject)
@@ -148,8 +148,8 @@ describe Putter::Follower do
       end
 
       it "prints the method and args using the configured strategy" do
-        Putter.configuration.print_strategy = Proc.new do |_, _, method, args, result|
-          puts "Method: :#{method}, Args: #{args}, Result: #{result}"
+        Putter.configuration.print_strategy = Proc.new do |data|
+          puts "Method: :#{data.method}, Args: #{data.args}, Result: #{data.result}"
         end
 
         follower = get_follower(subject)
@@ -227,8 +227,8 @@ describe Putter::Follower do
       test = Test.new
       follower = Putter::Follower.new(test)
 
-      Putter.configuration.print_strategy = Proc.new do |label|
-        puts "Label: #{label}"
+      Putter.configuration.print_strategy = Proc.new do |data|
+        puts "Label: #{data.label}"
       end
 
       expect do
@@ -277,8 +277,8 @@ describe Putter::Follower do
       end
       follower = Putter::Follower.new(TestClass1)
 
-      Putter.configuration.print_strategy = Proc.new do |label|
-        puts "Label: #{label}"
+      Putter.configuration.print_strategy = Proc.new do |data|
+        puts "Label: #{data.label}"
       end
 
       expect do

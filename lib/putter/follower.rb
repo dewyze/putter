@@ -28,7 +28,7 @@ module Putter
     end
 
     def add_method(method)
-      data = ProxyMethodData.new(method, @label)
+      data = ProxyMethodData.new({ label: @label, method: method})
 
       add_putter_method_to_proxy(@proxy, :instance_exec, data)
     end
