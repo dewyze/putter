@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "putter"
   spec.version       = Putter::VERSION
   spec.authors       = ["John DeWyze"]
-  spec.email         = ["john.dewyze@gmail.com"]
+  spec.email         = ["putter@dewyze.io"]
 
   spec.description   = "Putter provides a variety of methods to easily use puts debugging. It can reveal what methods are called, the arguments that were passed in, and what the result of the method call."
   spec.summary       = "Putter makes puts debugging easy."
