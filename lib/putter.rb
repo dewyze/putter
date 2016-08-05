@@ -6,6 +6,7 @@ require "putter/method_proxy"
 require "putter/print_strategy"
 require "putter/proxy_method_data"
 require "putter/version"
+require "putter/watcher_data"
 
 require "putter/follower"
 require "putter/watcher"

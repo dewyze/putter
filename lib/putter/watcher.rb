@@ -2,17 +2,11 @@ module Putter
   module Watcher
     extend MethodCreator
 
-    @label_registry = {}
-
-    class WatcherData
-      attr_accessor :label
-    end
+    @registry = {}
 
     def self.watch(obj, options={})
-      data = WatcherData.new
-      @label_registry[obj.singleton_class] = data
-
-      _set_label(data, options[:label], obj.name)
+      data = WatcherData.new(options, obj)
+      @registry[obj.singleton_class] = data
 
       class << obj
         prepend InstanceFollower
@@ -21,7 +15,7 @@ module Putter
     end
 
     def self.label_for(klass)
-      @label_registry[klass].label
+      @registry[klass].label
     end
 
     def self.class_proxy(klass)
@@ -43,14 +37,6 @@ module Putter
       end
 
       klass.instance_methods - ignored_methods + Putter.configuration.methods_whitelist.map(&:to_sym) + [:new]
-    end
-
-    def self._set_label(data, label, class_name)
-      if !label.nil? && label != ""
-        data.label = label
-      else
-        data.label = class_name
-      end
     end
   end
 end
