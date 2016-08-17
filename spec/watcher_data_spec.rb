@@ -5,7 +5,7 @@ describe Putter::WatcherData do
     expect(data.label).to eq("my_label")
   end
 
-  it "uses the class name" do
+  it "uses the class name if no label is provided" do
     data = Putter::WatcherData.new({}, Object)
 
     expect(data.label).to eq("Object")

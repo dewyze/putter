@@ -21,53 +21,14 @@ describe Putter::Watcher do
     expect(subject.singleton_class.ancestors[0]).to be_a(Putter::MethodProxy)
   end
 
-  it "does not log methods from configuration.ignore_methods_from" do
-    set_testing_print_strategy
-    Putter.configuration.ignore_methods_from = [Object]
-    Putter::Watcher.watch(subject)
+  it "adds methods to the proxy from the watcher data" do
+    methods = [:test_method_1, :test_method_2]
+    data = Putter::WatcherData.new({methods: methods}, subject)
 
-    expect{subject.to_s}.to_not output.to_stdout
-  end
+    Putter::Watcher.registry[subject.singleton_class] = data
+    proxy = Putter::Watcher.class_proxy(subject.singleton_class)
 
-  it "does log methods if configuration.ignore_methods_from is empty" do
-    Putter.configuration.print_strategy = Proc.new do |data|
-      puts "Method: :#{data.method}"
-    end
-
-    Putter.configuration.ignore_methods_from = []
-    Putter::Watcher.watch(subject)
-
-    expect{subject.to_s}.to output("Method: :to_s\n").to_stdout
-  end
-
-  it "does log methods in the methods whitelist" do
-    Putter.configuration.print_strategy = Proc.new do |data|
-      puts "Method: :#{data.method}"
-    end
-
-    Putter.configuration.methods_whitelist = [:to_s]
-    Putter::Watcher.watch(subject)
-
-    expect{subject.to_s}.to output("Method: :to_s\n").to_stdout
-  end
-
-  it "logs the 'new' method" do
-    Putter.configuration.print_strategy = Proc.new do |data|
-      puts "Method: :#{data.method}, Args: #{data.args}"
-    end
-
-    Putter::Watcher.watch(subject)
-
-    expect{subject.new}.to output("Method: :new, Args: []\n").to_stdout
-  end
-
-  it "adds methods to the proxy" do
-    Putter.configuration.print_strategy = Proc.new do |data|
-      puts "Method: :#{data.method}, Args: #{data.args}"
-    end
-    Putter::Watcher.watch(subject)
-
-    expect(subject.ancestors[0].methods).to include(:test_class_method, :test_class_method_arg)
+    expect(proxy.instance_methods).to contain_exactly(:test_method_1, :test_method_2)
   end
 
   it "does not call other watched classes" do
@@ -78,36 +39,6 @@ describe Putter::Watcher do
     expect do
       kls.test_class_method
     end.to_not raise_error(/super: no superclass method `test_class_method'/)
-  end
-
-  it "prints the class name as the label if it is not set" do
-    class ClassName
-      def self.test_method
-        "test_method"
-      end
-    end
-
-    Putter.configuration.print_strategy = Proc.new do |data|
-      puts "Label: #{data.label}"
-    end
-
-    Putter::Watcher.watch(ClassName)
-
-    expect do
-      ClassName.test_method
-    end.to output("Label: ClassName\n").to_stdout
-  end
-
-  it "prints the label if it is passed in" do
-    Putter.configuration.print_strategy = Proc.new do |data|
-      puts "Label: #{data.label}"
-    end
-
-    Putter::Watcher.watch(subject, { label: "my label" })
-
-    expect do
-      subject.test_class_method
-    end.to output("Label: my label\n").to_stdout
   end
 
   it "prints the line without the directory with number" do

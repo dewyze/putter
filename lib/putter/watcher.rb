@@ -14,6 +14,10 @@ module Putter
       end
     end
 
+    def self.registry
+      @registry
+    end
+
     def self.label_for(klass)
       @registry[klass].label
     end
