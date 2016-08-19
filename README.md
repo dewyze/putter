@@ -2,7 +2,7 @@
 
 It rhymes with gooder, not gutter.
 
-Putter is a tool for more easily implementing puts debugging. Instead of littering files with various puts statements, you can wrap an object with a follower and print out anytime a method is called on that object. This will follow the object throughout its path in the stack.
+Putter is a tool for more easily implementing puts debugging. Instead of littering files with various puts statements, you can wrap an object with a follower or watcher and print out anytime a method is called on that object. This will follow the object throughout its path in the stack.
 
 ## Installation
 
@@ -26,9 +26,9 @@ There are two ways to use putter. `Putter.follow` and `Putter.watch`.
 
 ### `Putter.follow`
 
-`Putter.follow` will allow you to create a wrapper around an object and then you can pass that wrapped object around. The advantage to using follow is that if a method is called that doesn't exist, or a method is created at runtime, the wrapped object will intercept those calls. This works on both instances and classes. However, following a class will not result in created instances of that class being followed.
+`Putter.follow` will allow you to create a wrapper around an object and then you can pass that wrapped object around. The advantage to using `follow` is that if a method is called that doesn't exist, or a method is created at runtime, the wrapped object will intercept those calls. This works on both instances and classes.
 
-Additionally, following an object will not allow you to intercept calls to a class that occurred outside the wrapped object. For that functionality, use `Putter.watch`
+However, following a class will not result in created instances of that class being followed. Additionally, following an object will not allow you to intercept calls to a class that occurred outside the wrapped object. For that functionality, use `Putter.watch`.
 
 `Putter.follow` usage:
 
@@ -91,8 +91,9 @@ my_obj.hello_instance("world", "!")
 Will output:
 
 ```bash
-Putter Debugging: Object ./putter/README.md:96 -- Method: :hello_class, Args: [:world, "!"], Result: "The class says hello world!"
-Putter Debugging: Object instance 1 ./putter/README.md:97 -- Method: :hello_instance, Args: [:world, "!"], Result: "The instance says hello world!"
+Putter Debugging: MyObject ./putter/README.md:96 -- Method: :hello_class, Args: ["world", "!"], Result: The class says hello world!
+Putter Debugging: MyObject ./putter/README.md:96 -- Method: :new, Args: [], Result: #<MyObject:0x0000000000>
+Putter Debugging: MyObject instance 1 ./putter/README.md:97 -- Method: :hello_instance, Args: ["world", "!"], Result: The instance says hello world!
 ```
 
 #### `Putter.watch` Options
@@ -112,7 +113,7 @@ Putter currently has 3 configuration options:
 ```ruby
 Putter.configure do |config|
   # 'print_strategy' takes a block that receives a data object with the label, line,
-  # method, args array, and result respectively. This block will be used after each method
+  # method, args string, and result respectively. This block will be used after each method
   # is called, it must contain puts or logger calls, to print or any other method callbacks
   # that are helpful.
   # Defaults to Putter::PrintStrategy::Default
@@ -127,7 +128,7 @@ Putter.configure do |config|
 
   # 'methods_whitelist' takes an array of methods and will always proxy and debug those methods
   # regardless of whether or not the class is ignored and regardless of what methods are passed
-  # in when running 'Putter.follow'
+  # in when running 'Putter.follow' or 'Putter.watch'
   config.methods_whitelist = [:to_s]
 end
 ```
