@@ -60,14 +60,14 @@ Putter Debugging: Object instance ./putter/README.md:57 -- Method: :hello, Args:
 ```ruby
 Putter.follow(
   object_to_follow,
-  label: "My object",  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances
-  methods: ["value"],  # If the value is nil, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
+  label: "My object",  # Optional - Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances
+  methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
 )
 ```
 
 ### `Putter.watch`
 
-`Putter.watch` can be used on classes to follow created instances of the class or to intercept method calls that occur throughout your application.
+`Putter.watch` can be used on classes to follow created instances of the class or to intercept class method calls that occur throughout your application.
 
 `Putter.watch` usage:
 
@@ -100,7 +100,8 @@ Putter Debugging: Object instance 1 ./putter/README.md:97 -- Method: :hello_inst
 ```ruby
 Putter.watch(
   ClassToWatch,
-  label: "My object",  # Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance #" for instances
+  label: "My class",  # Optional - Label to use after "Putter Debugging:  My class". Will be "ClassName" for classes or "ClassName instance #" for instances
+  methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
 )
 ```
 
