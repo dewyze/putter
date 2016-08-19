@@ -1,4 +1,10 @@
 # CHANGELOG
+### 0.4.0 - 2016-08-16
+- Add methods option to `Putter.watch`
+- Refactor watch method to use registry
+- Refactor method creation specs
+- Update README
+
 ### 0.3.0 - 2016-07-08
 - Add `Putter.watch` ability to watch a class and instances created by that class
 
