@@ -131,33 +131,6 @@ describe Putter::Follower do
 
         follower.add_method(:test_method)
       end
-
-      it "prints the line without the directory with number" do
-        Putter.configuration.print_strategy = Proc.new do |data|
-          puts "Line: .#{data.line}"
-        end
-
-        follower = get_follower(subject)
-
-        file = __FILE__
-        file = file.split(::Dir.pwd)[1]
-        expected_line = __LINE__
-        expect do
-          follower.test_method_arg("world")
-        end.to output(/^Line: \.#{file}:#{expected_line + 2}:in `block/).to_stdout
-      end
-
-      it "prints the method and args using the configured strategy" do
-        Putter.configuration.print_strategy = Proc.new do |data|
-          puts "Method: :#{data.method}, Args: #{data.args}, Result: #{data.result}"
-        end
-
-        follower = get_follower(subject)
-
-        expect do
-          follower.test_method_arg("world")
-        end.to output(/Method: :test_method_arg, Args: \["world"\]/).to_stdout
-      end
     end
   end
 
@@ -307,6 +280,5 @@ describe Putter::Follower do
         follower.test_method
       end.to_not output.to_stdout
     end
-
   end
 end
