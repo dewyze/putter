@@ -1,5 +1,5 @@
 # CHANGELOG
-### 0.4.0 - 2016-08-16
+### 0.4.0 - 2016-08-18
 - Add methods option to `Putter.watch`
 - Refactor watch method to use registry
 - Refactor method creation specs
