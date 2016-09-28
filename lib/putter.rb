@@ -1,5 +1,6 @@
 require "putter/configuration"
 require "putter/errors"
+require "putter/follower_data"
 require "putter/instance_follower"
 require "putter/method_creator"
 require "putter/method_proxy"

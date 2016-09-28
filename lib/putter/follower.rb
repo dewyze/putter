@@ -2,7 +2,7 @@ module Putter
   class Follower < BasicObject
     include MethodCreator
 
-    attr_reader :object, :proxied_methods, :proxy
+    attr_reader :object, :proxy
 
     def initialize(obj, options={})
       @object = obj
@@ -12,11 +12,11 @@ module Putter
       rescue ::NoMethodError
         ::Kernel.raise ::Putter::BasicObjectError
       end
-      _set_options(options)
+      @data = FollowerData.new(@object, @proxy, options)
     end
 
     def method_missing(method, *args, &blk)
-      if _add_method?(method)
+      if @data.add_method?(method)
         add_method(method)
       end
 
@@ -28,52 +28,9 @@ module Putter
     end
 
     def add_method(method)
-      data = ProxyMethodData.new({ label: @label, method: method})
+      proxy_method_data = ProxyMethodData.new(label: @data.label, method: method)
 
-      add_putter_instance_method_to_proxy(@proxy, data)
-    end
-
-    def _add_method?(method)
-      return true if _is_whitelisted_method?(method)
-      return false if _is_ignored_method?(method)
-      return false if @proxy.instance_methods.include?(method)
-      return @proxy_all_methods || proxied_methods.include?(method.to_s)
-    end
-
-    def _is_ignored_method?(method)
-      ::Putter.configuration.ignore_methods_from.each do |klass|
-        return true if klass.methods.include?(method.to_sym)
-        return true if klass.instance_methods.include?(method.to_sym)
-      end
-      return false
-    end
-
-    def _is_whitelisted_method?(method)
-      ::Putter.configuration.methods_whitelist.map(&:to_sym).include?(method.to_sym)
-    end
-
-    def _set_label(label)
-      if !label.nil?
-        @label = label
-      elsif @object.class == ::Class
-        @label = @object.name
-      else
-        @label = @object.class.name + " instance"
-      end
-    end
-
-    def _set_methods(methods)
-      if methods.nil?
-        @proxy_all_methods = true
-      else
-        @proxied_methods = methods.map(&:to_s)
-        @proxy_all_methods = false
-      end
-    end
-
-    def _set_options(options)
-      _set_label(options[:label])
-      _set_methods(options[:methods])
+      add_putter_instance_method_to_proxy(@proxy, proxy_method_data)
     end
   end
 end

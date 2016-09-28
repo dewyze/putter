@@ -30,7 +30,7 @@ module Putter
       proxy = MethodProxy.new
 
       Putter::Watcher.methods_for(klass).each do |method|
-        data = ProxyMethodData.new({ label: Putter::Watcher.label_for(klass), method: method })
+        data = ProxyMethodData.new(label: Putter::Watcher.label_for(klass), method: method)
         add_putter_class_method_to_proxy(proxy, data)
       end
 

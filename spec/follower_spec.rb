@@ -134,53 +134,12 @@ describe Putter::Follower do
     end
   end
 
-  shared_examples "proxied_methods" do
-    describe "#proxied_methods" do
-      it "proxies all methods if none are specified" do
-        follower = get_follower(subject)
-
-        follower.test_method
-        follower.test_method_arg("World")
-
-        expect(follower.proxy.instance_methods).to include(:test_method, :test_method_arg)
-      end
-
-      it "only proxies specified methods as strings" do
-        follower = Putter::Follower.new(subject, methods: ["test_method_arg"])
-
-        follower.test_method
-        follower.test_method_arg("World")
-
-        expect(follower.proxy.instance_methods).to include(:test_method_arg)
-        expect(follower.proxy.instance_methods).to_not include(:test_method)
-      end
-
-      it "accepts symbols" do
-        follower = Putter::Follower.new(subject, methods: [:test_method_arg])
-
-        follower.test_method
-        follower.test_method_arg("World")
-
-        expect(follower.proxy.instance_methods).to include(:test_method_arg)
-      end
-
-      it "calls unfollowed methods on the proxied object" do
-        follower = Putter::Follower.new(subject, methods: ["test_method_arg"])
-
-        expect(subject).to receive(:test_method)
-
-        follower.test_method
-      end
-    end
-  end
-
   describe "instances" do
     subject { Test.new }
 
     include_examples "initialize"
     include_examples "method_missing"
     include_examples "add_method"
-    include_examples "proxied_methods"
 
     it "does not add the proxy to other instances of a class" do
       proxied_test = Test.new
@@ -232,7 +191,6 @@ describe Putter::Follower do
     include_examples "initialize"
     include_examples "method_missing"
     include_examples "add_method"
-    include_examples "proxied_methods"
 
     it "does not add the proxy to instances of a class" do
       follower = get_follower(subject)

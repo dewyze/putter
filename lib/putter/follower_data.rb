@@ -19,8 +19,7 @@ module Putter
     def _set_label(label, object)
       if !label.nil?
         @label = label
-      elsif
-        object.class == Class
+      elsif object.class == Class
         @label = object.name
       else
         @label = object.class.name + " instance"
