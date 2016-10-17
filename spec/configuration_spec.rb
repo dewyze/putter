@@ -78,4 +78,27 @@ RSpec.describe Putter::Configuration do
       expect(::Putter.configuration.methods_whitelist).to eq([Object, Test])
     end
   end
+
+  describe "#allow_production" do
+    around(:each) do |spec|
+      class ActiveRecord
+        class Base
+        end
+      end
+
+      spec.run
+
+      Object.send(:remove_const, :ActiveRecord)
+    end
+
+    it "returns false by default" do
+      expect(::Putter.configuration.allow_production).to be false
+    end
+
+    it "allows it to be set to true" do
+      ::Putter.configuration.allow_production = true
+
+      expect(::Putter.configuration.allow_production).to be true
+    end
+  end
 end

@@ -1,12 +1,13 @@
 module Putter
   class Configuration
-    attr_accessor :print_strategy
+    attr_accessor :print_strategy, :allow_production
     attr_writer :ignore_methods_from, :methods_whitelist
 
     def initialize
       @ignore_methods_from = [Object]
       @ignore_methods_from << ActiveRecord::Base if defined?(ActiveRecord::Base)
       @print_strategy = PrintStrategy::Default
+      @allow_production = false
       @methods_whitelist = []
     end
 

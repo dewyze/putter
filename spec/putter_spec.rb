@@ -21,6 +21,34 @@ describe Putter do
 
         Putter.follow(subject, options)
       end
+
+      context "in rails" do
+        around(:each) do |spec|
+          class Rails
+            def self.env
+              "production"
+            end
+          end
+
+          spec.run
+
+          Object.send(:remove_const, :Rails)
+        end
+
+        it "does not run if in Rails.env == 'production'" do
+          expect do
+            Putter.follow(subject, {})
+          end.to output(/Putter cannot be run in production unless the 'allow_production' option is configured to true/).to_stdout
+        end
+
+        it "does run configuration.allow_production = true" do
+          ::Putter.configuration.allow_production = true
+
+          expect(Putter::Follower).to receive(:new)
+
+          Putter.follow(subject, {})
+        end
+      end
     end
   end
 
@@ -63,6 +91,37 @@ describe Putter do
       expect(Putter::Watcher).to receive(:watch)
 
       Putter.watch(klass)
+    end
+
+    context "in rails" do
+      around(:each) do |spec|
+        class Rails
+          def self.env
+            "production"
+          end
+        end
+
+        spec.run
+
+        Object.send(:remove_const, :Rails)
+      end
+
+      it "does not run if in Rails.env == 'production'" do
+        klass = Class.new
+
+        expect do
+          Putter.watch(klass, {})
+        end.to output(/Putter cannot be run in production unless the 'allow_production' option is configured to true/).to_stdout
+      end
+
+      it "does run configuration.allow_production = true" do
+        ::Putter.configuration.allow_production = true
+        klass = Class.new
+
+        expect(Putter::Watcher).to receive(:watch)
+
+        Putter.watch(klass, {})
+      end
     end
   end
 

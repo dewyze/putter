@@ -19,11 +19,15 @@ module Putter
     attr_writer :configuration
 
     def follow(obj, options={})
-      Putter::Follower.new(obj, options)
+      with_production_check do
+        Putter::Follower.new(obj, options)
+      end
     end
 
     def watch(obj, options={})
-      Putter::Watcher.watch(obj, options)
+      with_production_check do
+        Putter::Watcher.watch(obj, options)
+      end
     end
 
     def configuration
@@ -36,6 +40,14 @@ module Putter
 
     def reset_configuration
       @configuration = Configuration.new
+    end
+
+    def with_production_check
+      if !configuration.allow_production && defined?(Rails) && Rails.env == "production"
+        puts "Putter cannot be run in production unless the 'allow_production' option is configured to true".colorize(:red)
+      else
+        yield
+      end
     end
   end
 end

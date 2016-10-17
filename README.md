@@ -9,7 +9,7 @@ Putter is a tool for more easily implementing puts debugging. Instead of litteri
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'putter'
+gem "putter"
 ```
 
 And then execute:
@@ -112,7 +112,7 @@ Putter currently has 3 configuration options:
 
 ```ruby
 Putter.configure do |config|
-  # 'print_strategy' takes a block that receives a data object with the label, line,
+  # "print_strategy" takes a block that receives a data object with the label, line,
   # method, args string, and result respectively. This block will be used after each method
   # is called, it must contain puts or logger calls, to print or any other method callbacks
   # that are helpful.
@@ -121,15 +121,21 @@ Putter.configure do |config|
     puts "#{data.line} - Label: #{data.label}, Method: #{data.method}, Args: #{data.args}, Result: #{data.result}"
   end
 
-  # 'ignore_methods_from' takes an array of class names and will ignore both class and instance methods
+  # "ignore_methods_from" takes an array of class names and will ignore both class and instance methods
   # from those classes when adding methods to the proxy and adding debug output
   # Defaults to [Object] or [Object, ActiveRecord::Based] if defined
   config.ignore_methods_from = [Object, ActiveRecord::Base]
 
-  # 'methods_whitelist' takes an array of methods and will always proxy and debug those methods
+  # "methods_whitelist" takes an array of methods and will always proxy and debug those methods
   # regardless of whether or not the class is ignored and regardless of what methods are passed
-  # in when running 'Putter.follow' or 'Putter.watch'
+  # in when running "Putter.follow" or "Putter.watch"
+  # Defaults to []
   config.methods_whitelist = [:to_s]
+
+  # "allow_production" takes a boolean and determines whether or not Putter will run if
+  # `Rails.env == "production"`
+  # Defaults to false
+  config.allow_production = false
 end
 ```
 
