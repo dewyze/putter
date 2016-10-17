@@ -1,4 +1,10 @@
 # CHANGELOG
+### 0.4.1 - 2016-10-16
+- By default, Putter will not run in production mode in Rails, this can be allow via configuration
+- By default, Putter will ignore methods from ActiveRecord::Base if it is present
+- Do not re-define a method if it is whitelisted
+- Code cleanup and README updates
+
 ### 0.4.0 - 2016-08-18
 - Add methods option to `Putter.watch`
 - Refactor watch method to use registry

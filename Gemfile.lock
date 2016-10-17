@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    putter (0.4.0)
+    putter (0.4.1)
       colorize (~> 0)
 
 GEM
@@ -42,4 +42,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.12.4
+   1.13.5
