@@ -9,9 +9,9 @@ module Putter
     end
 
     def add_method?(method)
+      return false if @proxy.instance_methods.include?(method)
       return true if _is_whitelisted_method?(method)
       return false if _is_ignored_method?(method)
-      return false if @proxy.instance_methods.include?(method)
       return true if @proxied_methods.empty?
       return true if @proxied_methods.include?(method)
     end

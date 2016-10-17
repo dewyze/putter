@@ -48,6 +48,18 @@ RSpec.describe Putter::FollowerData do
       expect(data.add_method?(:new_method)).to be false
     end
 
+    it "returns false if it is already on the proxy and whitelisted" do
+      proxy = Module.new do
+        def new_method
+        end
+      end
+
+      Putter.configuration.methods_whitelist = [:new_method]
+      data = Putter::FollowerData.new(Object.new, proxy, {})
+
+      expect(data.add_method?(:new_method)).to be false
+    end
+
     it "returns true if no method were specified" do
       proxy = ::Putter::MethodProxy.new
       data = Putter::FollowerData.new(Object.new, proxy, {})

@@ -9,7 +9,27 @@ RSpec.describe Putter::Configuration do
     it "initializes ignore_methods_from with 'Object'" do
       configuration = Putter::Configuration.new
 
-      expect(configuration.ignore_methods_from).to eq([Object])
+      expect(configuration.ignore_methods_from).to contain_exactly(Object)
+    end
+
+    context "in rails" do
+      around(:each) do |spec|
+        class ActiveRecord
+          class Base
+          end
+        end
+
+        spec.run
+
+        Object.send(:remove_const, :ActiveRecord)
+      end
+
+      it "initializes ignore_methods_from with 'ActivedRecord::Base' if it exists" do
+        configuration = nil
+        configuration = Putter::Configuration.new
+
+        expect(configuration.ignore_methods_from).to contain_exactly(Object, ActiveRecord::Base)
+      end
     end
 
     it "initializes methods_whitelist with []" do

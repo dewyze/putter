@@ -123,7 +123,7 @@ Putter.configure do |config|
 
   # 'ignore_methods_from' takes an array of class names and will ignore both class and instance methods
   # from those classes when adding methods to the proxy and adding debug output
-  # Defaults to [Object]
+  # Defaults to [Object] or [Object, ActiveRecord::Based] if defined
   config.ignore_methods_from = [Object, ActiveRecord::Base]
 
   # 'methods_whitelist' takes an array of methods and will always proxy and debug those methods

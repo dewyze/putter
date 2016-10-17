@@ -17,25 +17,25 @@ module Putter
 
   class << self
     attr_writer :configuration
-  end
 
-  def self.follow(obj, options={})
-    Putter::Follower.new(obj, options)
-  end
+    def follow(obj, options={})
+      Putter::Follower.new(obj, options)
+    end
 
-  def self.watch(obj, options={})
-    Putter::Watcher.watch(obj, options)
-  end
+    def watch(obj, options={})
+      Putter::Watcher.watch(obj, options)
+    end
 
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
+    def configuration
+      @configuration ||= Configuration.new
+    end
 
-  def self.configure
-    yield configuration
-  end
+    def configure
+      yield configuration
+    end
 
-  def self.reset_configuration
-    @configuration = Configuration.new
+    def reset_configuration
+      @configuration = Configuration.new
+    end
   end
 end

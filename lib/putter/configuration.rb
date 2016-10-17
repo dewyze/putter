@@ -5,6 +5,7 @@ module Putter
 
     def initialize
       @ignore_methods_from = [Object]
+      @ignore_methods_from << ActiveRecord::Base if defined?(ActiveRecord::Base)
       @print_strategy = PrintStrategy::Default
       @methods_whitelist = []
     end
