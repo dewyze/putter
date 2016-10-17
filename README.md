@@ -139,12 +139,6 @@ Putter.configure do |config|
 end
 ```
 
-## Planned Features
-Feel free to open a PR to implement any of these if they are not yet added:
-
-- Active Record specific printing
-- Checking Rails.env to double check that putter is not called in production
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/dewyze/putter. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
