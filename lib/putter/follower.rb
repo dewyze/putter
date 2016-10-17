@@ -30,7 +30,7 @@ module Putter
     def add_method(method)
       proxy_method_data = ProxyMethodData.new(label: @data.label, method: method)
 
-      add_putter_instance_method_to_proxy(@proxy, proxy_method_data)
+      add_putter_method_to_proxy(@proxy, proxy_method_data)
     end
   end
 end
