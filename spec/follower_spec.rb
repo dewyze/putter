@@ -111,6 +111,12 @@ describe Putter::Follower do
 
         expect(follower.proxy.instance_methods).to include(:to_s)
       end
+
+      it "works with strict_typing" do
+        follower = get_follower(subject)
+
+        expect(follower.is_a?(subject.class)).to be true
+      end
     end
   end
 
@@ -239,4 +245,5 @@ describe Putter::Follower do
       end.to_not output.to_stdout
     end
   end
+
 end
