@@ -3,11 +3,11 @@ module Putter
     attr_accessor :label, :proxy_methods
 
     def initialize(options, klass)
-      @label = _set_label(options[:label], klass)
-      @proxy_methods = _set_methods(options[:methods], klass.singleton_class)
+      @label = set_label(options[:label], klass)
+      @proxy_methods = set_methods(options[:methods], klass.singleton_class)
     end
 
-    def _set_label(label, klass)
+    def set_label(label, klass)
       if !label.nil? && label != ""
         label
       else
@@ -15,9 +15,9 @@ module Putter
       end
     end
 
-    def _set_methods(methods, singleton_klass)
+    def set_methods(methods, singleton_klass)
       if methods.nil?
-        _methods_to_proxy(singleton_klass)
+        methods_to_proxy(singleton_klass)
       elsif !methods.is_a?(Array)
         [methods]
       else
@@ -25,7 +25,7 @@ module Putter
       end
     end
 
-    def _methods_to_proxy(singleton_klass)
+    def methods_to_proxy(singleton_klass)
       ignored_methods = []
 
       Putter.configuration.ignore_methods_from.each do |klass|

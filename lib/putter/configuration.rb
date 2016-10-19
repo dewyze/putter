@@ -12,14 +12,16 @@ module Putter
     end
 
     def ignore_methods_from
-      _convert_to_array(@ignore_methods_from)
+      convert_to_array(@ignore_methods_from)
     end
 
     def methods_whitelist
-      _convert_to_array(@methods_whitelist)
+      convert_to_array(@methods_whitelist)
     end
 
-    def _convert_to_array(val)
+    private
+
+    def convert_to_array(val)
       if val.nil?
         []
       elsif !val.is_a?(Array)
