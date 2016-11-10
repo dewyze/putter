@@ -63,5 +63,14 @@ describe Putter::WatcherData do
 
       expect(data.proxy_methods).to include(:to_s)
     end
+
+    it "does not include blacklisted methods" do
+      klass = Class.new { def self.fake_class_method; end }
+      Putter.configuration.methods_blacklist = [:fake_class_method]
+
+      data = Putter::WatcherData.new({}, klass)
+
+      expect(data.proxy_methods).to_not include(:fake_class_method)
+    end
   end
 end

@@ -29,6 +29,15 @@ RSpec.describe Putter::FollowerData do
       expect(data.add_method?(:to_s)).to be true
     end
 
+    it "returns false if the method is blacklisted" do
+      klass = Class.new { def fake_method; end }
+      proxy = ::Putter::MethodProxy.new
+      Putter.configuration.methods_blacklist = [:to_s]
+      data = Putter::FollowerData.new(klass, proxy, {})
+
+      expect(data.add_method?(:to_s)).to be false
+    end
+
     it "returns false if the method is ignored class method" do
       proxy = ::Putter::MethodProxy.new
       Putter.configuration.ignore_methods_from = [Object]

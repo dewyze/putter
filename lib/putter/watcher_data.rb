@@ -26,13 +26,15 @@ module Putter
     end
 
     def methods_to_proxy(singleton_klass)
-      ignored_methods = []
+      ignored_methods = Putter.configuration.methods_blacklist.map(&:to_sym)
 
       Putter.configuration.ignore_methods_from.each do |klass|
         ignored_methods += klass.methods
       end
 
-      singleton_klass.instance_methods - ignored_methods + Putter.configuration.methods_whitelist.map(&:to_sym) + [:new]
+      whitelist = Putter.configuration.methods_whitelist.map(&:to_sym) + [:new]
+
+      singleton_klass.instance_methods - ignored_methods + whitelist
     end
   end
 end

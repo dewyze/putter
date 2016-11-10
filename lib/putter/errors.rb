@@ -4,4 +4,10 @@ module Errors
       super
     end
   end
+
+  class MethodConflictError < StandardError
+    def initialize(msg="Methods cannot be white and blacklisted")
+      super
+    end
+  end
 end

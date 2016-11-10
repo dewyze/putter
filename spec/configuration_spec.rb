@@ -37,45 +37,63 @@ RSpec.describe Putter::Configuration do
 
       expect(configuration.methods_whitelist).to eq([])
     end
+
+    it "initializes methods_blacklist with []" do
+      configuration = Putter::Configuration.new
+
+      expect(configuration.methods_blacklist).to eq([])
+    end
   end
 
   describe "#ignore_methods_from" do
     it "returns an empty array when ignore_methods_from is nil" do
       ::Putter.configuration.ignore_methods_from = nil
 
-      expect(::Putter.configuration.ignore_methods_from).to eq([])
+      expect(::Putter.configuration.ignore_methods_from).to match_array([])
     end
 
     it "returns an array when ignore_methods_from is an object" do
       ::Putter.configuration.ignore_methods_from = Object
 
-      expect(::Putter.configuration.ignore_methods_from).to eq([Object])
+      expect(::Putter.configuration.ignore_methods_from).to match_array([Object])
     end
 
     it "returns an array when ignore_methods_from is an array" do
       ::Putter.configuration.ignore_methods_from = [Object, Test]
 
-      expect(::Putter.configuration.ignore_methods_from).to eq([Object, Test])
+      expect(::Putter.configuration.ignore_methods_from).to match_array([Object, Test])
     end
   end
 
   describe "#methods_whitelist" do
-    it "returns an empty array when methods_whitelist is nil" do
-      ::Putter.configuration.methods_whitelist = nil
+    it "returns the methods whitelist array" do
+      ::Putter.configuration.methods_whitelist = [:to_s]
 
-      expect(::Putter.configuration.methods_whitelist).to eq([])
+      expect(::Putter.configuration.methods_whitelist).to match_array([:to_s])
     end
 
-    it "returns an array when methods_whitelist is an object" do
-      ::Putter.configuration.methods_whitelist = Object
+    it "returns an MethodConflictError if methods are blacklisted" do
+      ::Putter.configuration.methods_blacklist = [:to_s]
 
-      expect(::Putter.configuration.methods_whitelist).to eq([Object])
+      expect do
+        ::Putter.configuration.methods_whitelist = [:to_s]
+      end.to raise_error(::Putter::MethodConflictError)
+    end
+  end
+
+  describe "#methods_blacklist" do
+    it "returns the methods_blacklist array" do
+      ::Putter.configuration.methods_blacklist = [:to_s]
+
+      expect(::Putter.configuration.methods_blacklist).to match_array([:to_s])
     end
 
-    it "returns an array when methods_whitelist is an array" do
-      ::Putter.configuration.methods_whitelist = [Object, Test]
+    it "returns an MethodConflictError if methods are whitelisted" do
+      ::Putter.configuration.methods_whitelist = [:to_s]
 
-      expect(::Putter.configuration.methods_whitelist).to eq([Object, Test])
+      expect do
+        ::Putter.configuration.methods_blacklist = [:to_s]
+      end.to raise_error(::Putter::MethodConflictError)
     end
   end
 

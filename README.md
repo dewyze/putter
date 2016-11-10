@@ -116,6 +116,7 @@ Putter.configure do |config|
   # method, args string, and result respectively. This block will be used after each method
   # is called, it must contain puts or logger calls, to print or any other method callbacks
   # that are helpful.
+
   # Defaults to Putter::PrintStrategy::Default
   config.print_strategy = Proc.new do |data|
     puts "#{data.line} - Label: #{data.label}, Method: #{data.method}, Args: #{data.args}, Result: #{data.result}"
@@ -123,17 +124,26 @@ Putter.configure do |config|
 
   # "ignore_methods_from" takes an array of class names and will ignore both class and instance methods
   # from those classes when adding methods to the proxy and adding debug output
+
   # Defaults to [Object] or [Object, ActiveRecord::Based] if defined
   config.ignore_methods_from = [Object, ActiveRecord::Base]
 
   # "methods_whitelist" takes an array of methods and will always proxy and debug those methods
   # regardless of whether or not the class is ignored and regardless of what methods are passed
   # in when running "Putter.follow" or "Putter.watch"
+
   # Defaults to []
   config.methods_whitelist = [:to_s]
 
+  # "methods_blacklist" takes an array of methods and will never proxy. If this is combined
+  # with the `methods_whitelist` then it will raise a `MethodConflictError`.
+
+  # Defaults to []
+  config.methods_blacklist = [:to_s]
+
   # "allow_production" takes a boolean and determines whether or not Putter will run if
   # `Rails.env == "production"`
+
   # Defaults to false
   config.allow_production = false
 end
