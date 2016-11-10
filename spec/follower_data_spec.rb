@@ -86,5 +86,30 @@ RSpec.describe Putter::FollowerData do
 
       expect(data.add_method?(:new_method)).to be true
     end
+
+    it "returns true if method is specified and blacklisted" do
+      Putter.configuration.methods_blacklist = [:new_method]
+      proxy = ::Putter::MethodProxy.new
+      data = Putter::FollowerData.new(
+        Object.new,
+        proxy,
+        { methods: [:new_method] },
+      )
+
+      expect(data.add_method?(:new_method)).to be true
+    end
+
+    it "returns true if method is specified and in the ignored objects list" do
+      klass = Class.new { def test_method; end }
+      Putter.configuration.ignore_methods_from = [klass]
+      proxy = ::Putter::MethodProxy.new
+      data = Putter::FollowerData.new(
+        Object.new,
+        proxy,
+        { methods: [:test_method] },
+      )
+
+      expect(data.add_method?(:test_method)).to be true
+    end
   end
 end

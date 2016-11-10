@@ -60,8 +60,11 @@ Putter Debugging: Object instance ./putter/README.md:57 -- Method: :hello, Args:
 ```ruby
 Putter.follow(
   object_to_follow,
-  label: "My object",  # Optional - Label to use after "Putter Debugging:  My object". Will be "ClassName" for classes or "ClassName instance" for instances
-  methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
+  label: "My object",  # Optional - Label to use after "Putter Debugging:  My object".
+  # Will be "ClassName" for classes or "ClassName instance" for instances
+  methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched.
+  # Otherwise, this is an array of methods to print debugging input for. This will override
+  # any settings in the configuration blacklist
 )
 ```
 
@@ -102,7 +105,9 @@ Putter Debugging: MyObject instance 1 ./putter/README.md:97 -- Method: :hello_in
 Putter.watch(
   ClassToWatch,
   label: "My class",  # Optional - Label to use after "Putter Debugging:  My class". Will be "ClassName" for classes or "ClassName instance #" for instances
-  methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched. Otherwise, this is an array of methods to print debugging input for
+  methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched.
+  # Otherwise, this is an array of methods to print debugging input for. This will override
+  # any settings in the configuration blacklist
 )
 ```
 
