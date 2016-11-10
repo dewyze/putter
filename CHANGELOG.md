@@ -1,4 +1,8 @@
 # CHANGELOG
+### 0.5.0 - 2016-11-10
+- Add methods blacklist to the configuration options
+- Ensures that local method options override anything in the blacklist
+
 ### 0.4.1 - 2016-10-16
 - By default, Putter will not run in production mode in Rails, this can be allow via configuration
 - By default, Putter will ignore methods from ActiveRecord::Base if it is present

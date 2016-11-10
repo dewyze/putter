@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    putter (0.4.1)
+    putter (0.5.0)
       colorize (~> 0)
 
 GEM
