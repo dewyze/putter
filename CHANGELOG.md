@@ -1,4 +1,7 @@
 # CHANGELOG
+### 0.5.1 - 2016-11-11
+- Add hotfix for putter running on a script in a local directory to print out the file information
+
 ### 0.5.0 - 2016-11-10
 - Add methods blacklist to the configuration options
 - Ensures that local method options override anything in the blacklist
