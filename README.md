@@ -1,5 +1,9 @@
 # Putter
 
+### Still Maintained as of February 2020
+
+## Description
+
 It rhymes with gooder, not gutter.
 
 Putter is a tool for more easily implementing puts debugging. Instead of littering files with various puts statements, you can wrap an object with a follower or watcher and print out anytime a method is called on that object. This will follow the object throughout its path in the stack.
