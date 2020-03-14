@@ -7,3 +7,5 @@
 /spec/reports/
 /tmp/
 putter-*.gem
+Gemfile.lock
+vendor/
