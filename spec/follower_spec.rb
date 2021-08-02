@@ -229,9 +229,9 @@ describe Putter::Follower do
       hash = { a: 1, b: 2 }
       follower = get_follower(hash)
 
-      expect(hash).to receive(:to_json)
+      expect(hash).to receive(:to_s)
 
-      follower.to_json
+      follower.to_s
     end
   end
 

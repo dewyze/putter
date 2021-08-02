@@ -1,4 +1,7 @@
 # CHANGELOG
+### 0.6.0 - 2021-08-02
+- Update required ruby version to 2.7
+
 ### 0.5.1 - 2016-11-11
 - Add hotfix for putter running on a script in a local directory to print out the file information
 

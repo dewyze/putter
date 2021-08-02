@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/dewyze/putter"
   spec.license       = "MIT"
 
-  spec.required_ruby_version = '~> 2.1'
+  spec.required_ruby_version = '~> 2.7'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "bin"
@@ -23,8 +23,8 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'colorize', '~> 0'
 
-  spec.add_development_dependency "bundler", "~> 2.1.4"
-  spec.add_development_dependency "pry", "~> 0.10.3"
-  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "bundler", "~> 2.1"
+  spec.add_development_dependency "pry", "~> 0.14.1"
+  spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.0"
 end
