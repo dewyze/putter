@@ -1,6 +1,6 @@
 # Putter
 
-### Still Maintained as of February 2020
+### Still Maintained as of July 2022
 
 ## Description
 
