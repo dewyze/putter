@@ -20,19 +20,19 @@ RSpec.describe Putter::FollowerData do
   end
 
   describe "#add_method?" do
-    it "returns true if the method is whitelisted" do
+    it "returns true if the method is allowlisted" do
       proxy = ::Putter::MethodProxy.new
       Putter.configuration.ignore_methods_from = [Object]
-      Putter.configuration.methods_whitelist = [:to_s]
+      Putter.configuration.methods_allowlist = [:to_s]
       data = Putter::FollowerData.new(Object.new, proxy, {})
 
       expect(data.add_method?(:to_s)).to be true
     end
 
-    it "returns false if the method is blacklisted" do
+    it "returns false if the method is denylisted" do
       klass = Class.new { def fake_method; end }
       proxy = ::Putter::MethodProxy.new
-      Putter.configuration.methods_blacklist = [:to_s]
+      Putter.configuration.methods_denylist = [:to_s]
       data = Putter::FollowerData.new(klass, proxy, {})
 
       expect(data.add_method?(:to_s)).to be false
@@ -57,13 +57,13 @@ RSpec.describe Putter::FollowerData do
       expect(data.add_method?(:new_method)).to be false
     end
 
-    it "returns false if it is already on the proxy and whitelisted" do
+    it "returns false if it is already on the proxy and allowlisted" do
       proxy = Module.new do
         def new_method
         end
       end
 
-      Putter.configuration.methods_whitelist = [:new_method]
+      Putter.configuration.methods_allowlist = [:new_method]
       data = Putter::FollowerData.new(Object.new, proxy, {})
 
       expect(data.add_method?(:new_method)).to be false
@@ -87,8 +87,8 @@ RSpec.describe Putter::FollowerData do
       expect(data.add_method?(:new_method)).to be true
     end
 
-    it "returns true if method is specified and blacklisted" do
-      Putter.configuration.methods_blacklist = [:new_method]
+    it "returns true if method is specified and denylisted" do
+      Putter.configuration.methods_denylist = [:new_method]
       proxy = ::Putter::MethodProxy.new
       data = Putter::FollowerData.new(
         Object.new,

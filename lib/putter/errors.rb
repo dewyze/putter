@@ -6,7 +6,7 @@ module Errors
   end
 
   class MethodConflictError < StandardError
-    def initialize(msg="Methods cannot be white and blacklisted")
+    def initialize(msg="Methods cannot be allow and denylisted")
       super
     end
   end

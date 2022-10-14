@@ -102,9 +102,9 @@ describe Putter::Follower do
         expect(follower.proxy.instance_methods).to include(:to_s)
       end
 
-      it "adds whitelist methods" do
+      it "adds allowlist methods" do
         Putter.configuration.ignore_methods_from = [Object]
-        ::Putter.configuration.methods_whitelist = [:to_s]
+        ::Putter.configuration.methods_allowlist = [:to_s]
         follower = get_follower(subject)
 
         follower.to_s

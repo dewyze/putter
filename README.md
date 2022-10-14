@@ -1,6 +1,6 @@
 # Putter
 
-### Still Maintained as of July 2022
+### Still Maintained as of October 2022
 
 ## Description
 
@@ -68,7 +68,7 @@ Putter.follow(
   # Will be "ClassName" for classes or "ClassName instance" for instances
   methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched.
   # Otherwise, this is an array of methods to print debugging input for. This will override
-  # any settings in the configuration blacklist
+  # any settings in the configuration denylist
 )
 ```
 
@@ -111,7 +111,7 @@ Putter.watch(
   label: "My class",  # Optional - Label to use after "Putter Debugging:  My class". Will be "ClassName" for classes or "ClassName instance #" for instances
   methods: ["my_method"],  # Optional - If array is empty, then all methods will be watched.
   # Otherwise, this is an array of methods to print debugging input for. This will override
-  # any settings in the configuration blacklist
+  # any settings in the configuration denylist
 )
 ```
 
@@ -137,18 +137,18 @@ Putter.configure do |config|
   # Defaults to [Object] or [Object, ActiveRecord::Based] if defined
   config.ignore_methods_from = [Object, ActiveRecord::Base]
 
-  # "methods_whitelist" takes an array of methods and will always proxy and debug those methods
+  # "methods_allowlist" takes an array of methods and will always proxy and debug those methods
   # regardless of whether or not the class is ignored and regardless of what methods are passed
   # in when running "Putter.follow" or "Putter.watch"
 
   # Defaults to []
-  config.methods_whitelist = [:to_s]
+  config.methods_allowlist = [:to_s]
 
-  # "methods_blacklist" takes an array of methods and will never proxy. If this is combined
-  # with the `methods_whitelist` then it will raise a `MethodConflictError`.
+  # "methods_denylist" takes an array of methods and will never proxy. If this is combined
+  # with the `methods_allowlist` then it will raise a `MethodConflictError`.
 
   # Defaults to []
-  config.methods_blacklist = [:to_s]
+  config.methods_denylist = [:to_s]
 
   # "allow_production" takes a boolean and determines whether or not Putter will run if
   # `Rails.env == "production"`

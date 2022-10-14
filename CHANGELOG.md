@@ -1,7 +1,11 @@
 # CHANGELOG
+### 0.7.0 - 2022-10-14
+- Change whitelist/blacklist, to allowlist/denylist but maintain backwards
+    compatibility
+
 ### 0.6.1 - 2021-08-02
 - Update required ruby version to at least 2.7
--
+
 ### 0.6.0 - 2021-08-02
 - Update required ruby version to 2.7
 

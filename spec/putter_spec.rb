@@ -134,7 +134,7 @@ describe Putter do
       Putter.configure do |config|
         config.print_strategy = @print_strategy
         config.ignore_methods_from = nil
-        config.methods_whitelist = [:to_s]
+        config.methods_allowlist = [:to_s]
       end
     end
 
@@ -146,8 +146,8 @@ describe Putter do
       expect(Putter.configuration.ignore_methods_from).to eq([])
     end
 
-    it "whitelists configure methods" do
-      expect(Putter.configuration.methods_whitelist).to eq([:to_s])
+    it "allowlists configure methods" do
+      expect(Putter.configuration.methods_allowlist).to eq([:to_s])
     end
 
     describe "#reset" do

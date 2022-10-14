@@ -32,16 +32,16 @@ RSpec.describe Putter::Configuration do
       end
     end
 
-    it "initializes methods_whitelist with []" do
+    it "initializes methods_allowlist with []" do
       configuration = Putter::Configuration.new
 
-      expect(configuration.methods_whitelist).to eq([])
+      expect(configuration.methods_allowlist).to eq([])
     end
 
-    it "initializes methods_blacklist with []" do
+    it "initializes methods_denylist with []" do
       configuration = Putter::Configuration.new
 
-      expect(configuration.methods_blacklist).to eq([])
+      expect(configuration.methods_denylist).to eq([])
     end
   end
 
@@ -65,18 +65,42 @@ RSpec.describe Putter::Configuration do
     end
   end
 
-  describe "#methods_whitelist" do
-    it "returns the methods whitelist array" do
-      ::Putter.configuration.methods_whitelist = [:to_s]
+  describe "#methods_allowlist" do
+    it "returns the methods allowlist array" do
+      ::Putter.configuration.methods_allowlist = [:to_s]
 
-      expect(::Putter.configuration.methods_whitelist).to match_array([:to_s])
+      expect(::Putter.configuration.methods_allowlist).to match_array([:to_s])
     end
 
-    it "returns an MethodConflictError if methods are blacklisted" do
-      ::Putter.configuration.methods_blacklist = [:to_s]
+    it "returns an MethodConflictError if methods are denylisted" do
+      ::Putter.configuration.methods_denylist = [:to_s]
 
       expect do
-        ::Putter.configuration.methods_whitelist = [:to_s]
+        ::Putter.configuration.methods_allowlist = [:to_s]
+      end.to raise_error(::Putter::MethodConflictError)
+    end
+  end
+
+  describe "#methods_whitelist" do
+    it "calls allowlist" do
+      ::Putter.configuration.methods_whitelist = [:to_s]
+
+      expect(::Putter.configuration.methods_allowlist).to match_array([:to_s])
+    end
+  end
+
+  describe "#methods_denylist" do
+    it "returns the methods_denylist array" do
+      ::Putter.configuration.methods_denylist = [:to_s]
+
+      expect(::Putter.configuration.methods_denylist).to match_array([:to_s])
+    end
+
+    it "returns an MethodConflictError if methods are allowlisted" do
+      ::Putter.configuration.methods_allowlist = [:to_s]
+
+      expect do
+        ::Putter.configuration.methods_denylist = [:to_s]
       end.to raise_error(::Putter::MethodConflictError)
     end
   end
@@ -85,15 +109,7 @@ RSpec.describe Putter::Configuration do
     it "returns the methods_blacklist array" do
       ::Putter.configuration.methods_blacklist = [:to_s]
 
-      expect(::Putter.configuration.methods_blacklist).to match_array([:to_s])
-    end
-
-    it "returns an MethodConflictError if methods are whitelisted" do
-      ::Putter.configuration.methods_whitelist = [:to_s]
-
-      expect do
-        ::Putter.configuration.methods_blacklist = [:to_s]
-      end.to raise_error(::Putter::MethodConflictError)
+      expect(::Putter.configuration.methods_denylist).to match_array([:to_s])
     end
   end
 

@@ -11,8 +11,8 @@ module Putter
     def add_method?(method)
       return false if @proxy.instance_methods.include?(method)
       return true if @proxied_methods.include?(method)
-      return true if is_whitelisted_method?(method)
-      return false if is_blacklisted_method?(method)
+      return true if is_allowed_method?(method)
+      return false if is_denied_method?(method)
       return false if is_ignored_method?(method)
       return true if @proxied_methods.empty?
     end
@@ -29,12 +29,12 @@ module Putter
       end
     end
 
-    def is_whitelisted_method?(method)
-      ::Putter.configuration.methods_whitelist.map(&:to_sym).include?(method.to_sym)
+    def is_allowed_method?(method)
+      ::Putter.configuration.methods_allowlist.map(&:to_sym).include?(method.to_sym)
     end
 
-    def is_blacklisted_method?(method)
-      ::Putter.configuration.methods_blacklist.map(&:to_sym).include?(method.to_sym)
+    def is_denied_method?(method)
+      ::Putter.configuration.methods_denylist.map(&:to_sym).include?(method.to_sym)
     end
 
     def is_ignored_method?(method)
